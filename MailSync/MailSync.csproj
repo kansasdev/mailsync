@@ -29,7 +29,7 @@
     <AssemblyName>MailSync</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <DefineConstants>VSTO40</DefineConstants>
-    <IsWebBootstrapper>False</IsWebBootstrapper>
+    <IsWebBootstrapper>True</IsWebBootstrapper>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -40,7 +40,7 @@
     </SccProvider>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <PublishUrl>C:\Users\Michal\Documents\Visual Studio 2013\Projects\MailSyncSln\download\</PublishUrl>
-    <InstallUrl />
+    <InstallUrl>https://raw.githubusercontent.com/kansasdev/mailsync/master/download/</InstallUrl>
     <TargetCulture>pl</TargetCulture>
     <ApplicationVersion>1.0.0.0</ApplicationVersion>
     <AutoIncrementApplicationRevision>false</AutoIncrementApplicationRevision>
@@ -49,7 +49,7 @@
     <UpdateIntervalUnits>days</UpdateIntervalUnits>
     <ProductName>MailSync</ProductName>
     <PublisherName>Kansas</PublisherName>
-    <SupportUrl />
+    <SupportUrl>https://github.com/kansasdev/mailsync/wiki</SupportUrl>
     <FriendlyName>Mail Sync</FriendlyName>
     <OfficeApplicationDescription>Program for syncing mails between Windows Mail and Outlook</OfficeApplicationDescription>
     <LoadBehavior>3</LoadBehavior>
