@@ -20,7 +20,7 @@ namespace MailSync
             MailSync.RibbonOutlook ro = (MailSync.RibbonOutlook)Globals.Ribbons.GetRibbon(typeof(MailSync.RibbonOutlook));
             if(ro!=null)
             {
-                ro.App = app;
+                ro.App = app; 
             }
 
         }
