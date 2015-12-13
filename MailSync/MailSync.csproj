@@ -29,7 +29,7 @@
     <AssemblyName>MailSync</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <DefineConstants>VSTO40</DefineConstants>
-    <IsWebBootstrapper>False</IsWebBootstrapper>
+    <IsWebBootstrapper>True</IsWebBootstrapper>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -41,7 +41,7 @@
     <TargetFrameworkProfile />
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <PublishUrl>C:\Users\Michal\Documents\Visual Studio 2013\Projects\MailSyncSln\download\</PublishUrl>
-    <InstallUrl />
+    <InstallUrl>https://raw.githubusercontent.com/kansasdev/mailsync/master/download/</InstallUrl>
     <TargetCulture>en</TargetCulture>
     <ApplicationVersion>1.5.0.0</ApplicationVersion>
     <AutoIncrementApplicationRevision>false</AutoIncrementApplicationRevision>
@@ -73,7 +73,7 @@
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Sample.EULA">
       <Visible>False</Visible>
-      <ProductName>MFCMAPI%28MrMAPI%29 and Mail Sync</ProductName>
+      <ProductName>MFCMAPI%28MrMAPI%29 and Mail Sync under MS-PL license, MIMEKit Lite under MIT license</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.VSTORuntime.4.0">
