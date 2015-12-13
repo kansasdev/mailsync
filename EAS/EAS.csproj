@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{42CD5B32-962C-48FE-BCDB-16C5F1B15D97}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EAS</RootNamespace>
+    <AssemblyName>EAS</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="generated\FolderSyncRequest.cs" />
+    <Compile Include="generated\FolderSyncResponse.cs" />
+    <Compile Include="generated\ItemOperationsRequest.cs" />
+    <Compile Include="generated\ItemOperationsResponse.cs" />
+    <Compile Include="generated\ProvisionRequest.cs" />
+    <Compile Include="generated\ProvisionResponse.cs" />
+    <Compile Include="generated\SyncRequest.cs" />
+    <Compile Include="generated\SyncResponse.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Protocol\ASCommandRequest.cs" />
+    <Compile Include="Protocol\ASCommandResponse.cs" />
+    <Compile Include="Protocol\ASFolderCommandRequest.cs" />
+    <Compile Include="Protocol\ASFolderCommandResponse.cs" />
+    <Compile Include="Protocol\ASOptionsRequest.cs" />
+    <Compile Include="Protocol\ASOptionsResponse.cs" />
+    <Compile Include="Protocol\ASSyncCommandRequest.cs" />
+    <Compile Include="Protocol\ASSyncCommandResponse.cs" />
+    <Compile Include="Protocol\ASWBXML.cs" />
+    <Compile Include="Protocol\ASWBXMLCodePage.cs" />
+    <Compile Include="Protocol\ASWBXMLQueue.cs" />
+    <Compile Include="Protocol\EncodedRequest.cs" />
+    <Compile Include="Protocol\ServerSyncCommand.cs" />
+    <Compile Include="xmlconfig\XmlHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Protocol\Folder.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="xsd\AirSync.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\AirSyncBase.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\Calendar.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\Contacts.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\Contacts2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\DocumentLibrary.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\Email.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\Email2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\FolderHierarchy.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\FolderSyncRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\FolderSyncResponse.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\ItemOperations.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\ItemOperationsRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\ItemOperationsResponse.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\Notes.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\Provision.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\ProvisionRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\ProvisionResponse.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\RightsManagement.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\Search.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\Settings.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\SettingsRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\SettingsResponse.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\SyncRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\SyncResponse.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="xsd\Tasks.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="xsd\FolderSync_request.xml" />
+    <Content Include="xsd\FolderSync_response.xml" />
+    <Content Include="xsd\ItemOperationsRequest_param.xml" />
+    <Content Include="xsd\ItemOperationsResponse_param.xml" />
+    <Content Include="xsd\ProvisionRequest_param.xml" />
+    <Content Include="xsd\ProvisionResponse_param.xml" />
+    <Content Include="xsd\SettingsRequest_param.xml" />
+    <Content Include="xsd\SyncRequest_param.xml" />
+    <Content Include="xsd\SyncResponse_param.xml" />
+    <Content Include="xsd\xsd_param.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

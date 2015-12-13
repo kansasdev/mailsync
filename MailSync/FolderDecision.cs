@@ -16,14 +16,16 @@ namespace MailSync
     {
         public List<string> lstKatalogi;
         public string SelectedFolder;
+        public string SelectedTime;
 
         public FolderDecision()
         {
             InitializeComponent();
         }
 
-        public FolderDecision(List<string> lstOutlookFolders)
+        public FolderDecision(List<string> lstOutlookFolders,bool isOnlineSyncOption)
         {
+            
             if (Thread.CurrentThread.CurrentCulture.Name == "pl-PL")
             {
                 rm = new ResourceManager("MailSync.Properties.Resources_pl_PL", typeof(RibbonOutlook).Assembly);
@@ -41,6 +43,11 @@ namespace MailSync
             {
                 lstView.Items.Add(new ListViewItem(s));
             }
+            if(isOnlineSyncOption)
+            {
+                cmbPickDate.Visible = true;
+                lblCombo.Visible = true;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -55,9 +62,31 @@ namespace MailSync
 
         private void lstView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            button1.Enabled = true;
+            if (cmbPickDate.Visible)
+            {
+                if (cmbPickDate.SelectedIndex != -1)
+                {
+                    button1.Enabled = true;
+                }
+                else
+                {
+                    button1.Enabled = false;
+                }
+            }
+            else
+            {
+                button1.Enabled = true;
+            }
         }
 
+        private void cmbPickDate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectedTime = cmbPickDate.SelectedItem.ToString();
+            if (lstView.SelectedItems.Count>0)
+            {
+                button1.Enabled = true;
 
+            }
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace MailSync
             _rm = rm;
         }
 
-        public bool CleanFolderMapiFiles(List<FileDateMI> lst)
+        public bool CleanFolderMapiMimeFiles(List<FileDateMI> lst)
         {
                 foreach (FileDateMI fdm in lst)
                 {
@@ -36,14 +36,14 @@ namespace MailSync
                     }
                 }
                 lst.Clear();
-                return CleanFolderMapiFiles();
+                return CleanFolderMapiMimeFiles();
         }
 
-        public bool CleanFolderMapiFiles()
+        public bool CleanFolderMapiMimeFiles()
         {
            if(!string.IsNullOrEmpty(path)&&Directory.Exists(path))
            {
-               string[] files = Directory.GetFiles(path, "*.msg");
+               string[] files = Directory.GetFiles(path, "*.*");
                OnTotalNumberOfFilesEvent(files.Count()+ " " + _rm.GetString("strFilesToDeleteRes"));
                OnNewFilesNumberEvent("");
                int number = 0;

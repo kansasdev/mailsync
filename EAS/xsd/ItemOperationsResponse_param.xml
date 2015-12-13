@@ -1,0 +1,18 @@
+﻿<xsd xmlns='http://microsoft.com/dotnet/tools/xsd/'>
+  <!--xsd /c /parameters:SyncResponse_param.xml /out:..\generated-->
+  <generateClasses language='CS' namespace='EAS.generated.ItemOperationsResponseNamespace'>
+    <schema>AirSyncBase.xsd</schema>
+    <schema>AirSync.xsd</schema>
+    <schema>DocumentLibrary.xsd</schema>
+    <schema>ItemOperations.xsd</schema>
+    <schema>RightsManagement.xsd</schema>
+    <schema>Search.xsd</schema>
+    <schema>Email2.xsd</schema>
+    <schema>Email.xsd</schema>
+    <schema>Calendar.xsd</schema>
+    <schema>Tasks.xsd</schema>
+    <schema>Contacts2.xsd</schema>
+    <schema>Contacts.xsd</schema>
+    <schema>.\ItemOperationsResponse.xsd</schema>
+  </generateClasses>
+</xsd>

@@ -207,4 +207,79 @@
   <data name="tabSyncLabelRes" xml:space="preserve">
     <value>MAIL SYNC</value>
   </data>
+  <data name="btnSyncLabelRes" xml:space="preserve">
+    <value>SYNC ONLINE</value>
+  </data>
+  <data name="strEmailsDownloaded" xml:space="preserve">
+    <value> EMAIL FETCHED</value>
+  </data>
+  <data name="strEmailsToSync" xml:space="preserve">
+    <value> EMAILS ON SERVER</value>
+  </data>
+  <data name="credInitialUserName" xml:space="preserve">
+    <value>username</value>
+  </data>
+  <data name="credMessage" xml:space="preserve">
+    <value>Enter username and password</value>
+  </data>
+  <data name="credTitle" xml:space="preserve">
+    <value>Log into EAS server</value>
+  </data>
+  <data name="strSyncProvision" xml:space="preserve">
+    <value>Error during synchronization, full mode has been set, try again</value>
+  </data>
+  <data name="strSyncWrongUserPass" xml:space="preserve">
+    <value>Wrong username and/or password</value>
+  </data>
+  <data name="remoteFolderErrToSync" xml:space="preserve">
+    <value>You haven't picked up remote folder to synchronize with</value>
+  </data>
+  <data name="cmbTextChooseOption" xml:space="preserve">
+    <value>Choose number of days to synchronize</value>
+  </data>
+  <data name="lblChooseOption" xml:space="preserve">
+    <value>Pick required directory up</value>
+  </data>
+  <data name="strWipeReq" xml:space="preserve">
+    <value>Wipe requested, try sync again</value>
+  </data>
+  <data name="settingsBtnCancel" xml:space="preserve">
+    <value>CANCEL</value>
+  </data>
+  <data name="settingsBtnOK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="settingsChkUnblock" xml:space="preserve">
+    <value>BLOCKED</value>
+  </data>
+  <data name="settingsLblDevice" xml:space="preserve">
+    <value>DEVICE</value>
+  </data>
+  <data name="settingsLblProtocol" xml:space="preserve">
+    <value>PROTOCOL</value>
+  </data>
+  <data name="settingsLblServer" xml:space="preserve">
+    <value>SERVER</value>
+  </data>
+  <data name="settingsLblUsername" xml:space="preserve">
+    <value>USER</value>
+  </data>
+  <data name="settingsMess" xml:space="preserve">
+    <value>Incomplete config information: Server address and protocol version and device id</value>
+  </data>
+  <data name="settingsTitle" xml:space="preserve">
+    <value>Addin settings</value>
+  </data>
+  <data name="btnConfigLabelRes" xml:space="preserve">
+    <value>SET CONFIG</value>
+  </data>
+  <data name="tooltipCheckboxSettings" xml:space="preserve">
+    <value>Change only in case no synchronization is possible, otherwise your account is going to have many devices tied</value>
+  </data>
+  <data name="tooltipProtocolSettings" xml:space="preserve">
+    <value>Protocol version, for example 14</value>
+  </data>
+  <data name="tooltipServerSettings" xml:space="preserve">
+    <value>Address for example server.eas.uk</value>
+  </data>
 </root>

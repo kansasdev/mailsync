@@ -22,10 +22,12 @@ namespace MailSync
                 rm = new ResourceManager("MailSync.Properties.Resources", typeof(RibbonOutlook).Assembly);
             }
 
-            
+
             InitializeComponent();
-          
+
         }
+
+
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -51,6 +53,7 @@ namespace MailSync
             this.SyncTab = this.Factory.CreateRibbonTab();
             this.grpImport = this.Factory.CreateRibbonGroup();
             this.btnImport = this.Factory.CreateRibbonButton();
+            this.btnSync = this.Factory.CreateRibbonButton();
             this.grpKonwersja = this.Factory.CreateRibbonGroup();
             this.btnDirectory = this.Factory.CreateRibbonButton();
             this.grpCleaning = this.Factory.CreateRibbonGroup();
@@ -61,12 +64,14 @@ namespace MailSync
             this.lblNew = this.Factory.CreateRibbonLabel();
             this.lblConverted = this.Factory.CreateRibbonLabel();
             this.lblTotal = this.Factory.CreateRibbonLabel();
+            this.btnConfig = this.Factory.CreateRibbonButton();
             this.SyncTab.SuspendLayout();
             this.grpImport.SuspendLayout();
             this.grpKonwersja.SuspendLayout();
             this.grpCleaning.SuspendLayout();
             this.grpHelp.SuspendLayout();
             this.grpInformation.SuspendLayout();
+            this.SuspendLayout();
             // 
             // SyncTab
             // 
@@ -81,6 +86,7 @@ namespace MailSync
             // grpImport
             // 
             this.grpImport.Items.Add(this.btnImport);
+            this.grpImport.Items.Add(this.btnSync);
             this.grpImport.Label = rm.GetString("grpImportLabelRes");
             this.grpImport.Name = "grpImport";
             // 
@@ -92,6 +98,14 @@ namespace MailSync
             this.btnImport.OfficeImageId = "ImportOutlook";
             this.btnImport.ShowImage = true;
             this.btnImport.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnImport_Click);
+
+            this.btnSync.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnSync.Label = rm.GetString("btnSyncLabelRes");
+            this.btnSync.Name = "btnSync";
+            this.btnSync.OfficeImageId = "SyncNow";
+            this.btnSync.ShowImage = true;
+            this.btnSync.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSync_Click);
+
             // 
             // grpKonwersja
             // 
@@ -126,6 +140,7 @@ namespace MailSync
             // grpPomoc
             // 
             this.grpHelp.Items.Add(this.btnHelp);
+            this.grpHelp.Items.Add(this.btnConfig);
             this.grpHelp.Label = rm.GetString("grpHelpLabelRes");
             this.grpHelp.Name = "grpHelp";
             // 
@@ -137,6 +152,14 @@ namespace MailSync
             this.btnHelp.OfficeImageId = "HelpDevResources";
             this.btnHelp.ShowImage = true;
             this.btnHelp.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnHelp_Click);
+
+            this.btnConfig.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnConfig.Label = rm.GetString("btnConfigLabelRes");
+            this.btnConfig.Name = "btnConfig";
+            this.btnConfig.OfficeImageId = "AccountSettings";
+            this.btnConfig.ShowImage = true;
+            this.btnConfig.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnConfig_Click);
+
             // 
             // grpInformacje
             // 
@@ -167,6 +190,7 @@ namespace MailSync
             this.RibbonType = "Microsoft.Outlook.Explorer";
             this.Tabs.Add(this.SyncTab);
             this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.RibbonOutlook_Load);
+           
             this.SyncTab.ResumeLayout(false);
             this.SyncTab.PerformLayout();
             this.grpImport.ResumeLayout(false);
@@ -187,6 +211,7 @@ namespace MailSync
         internal Microsoft.Office.Tools.Ribbon.RibbonTab SyncTab;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpImport;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnImport;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSync;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnDirectory;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpCleaning;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpInformation;
@@ -197,6 +222,7 @@ namespace MailSync
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpHelp;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnClean;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnHelp;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnConfig;
     }
 
     partial class ThisRibbonCollection

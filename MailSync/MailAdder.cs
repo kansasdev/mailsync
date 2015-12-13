@@ -126,7 +126,7 @@ namespace MailSync
                 {
                     if(mi.Attachments!=null&&mi.Attachments.Count>0)
                     {
-
+                        /* //NOT NEEDED
                         for (int i = 1; i<= mi.Attachments.Count; i++)
                         {
                            string file = FindProperAttachment(fdmi.FileName, mi.Attachments[i].FileName,pathToDirWithAttachments);
@@ -136,7 +136,7 @@ namespace MailSync
                                 mi.Attachments.Add(file);
                             }
 
-                        }
+                        }*/
                     }
                     mi.Move(choosenFolder);
                     OnNewFilesNumberEvent(string.Format("{0} {1}", addedNumber.ToString(), _rm.GetString("strNewEmailsInsideOutlookDirRes")));

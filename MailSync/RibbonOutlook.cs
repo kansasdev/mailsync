@@ -11,6 +11,11 @@ using System.ComponentModel;
 using System.Resources;
 using System.Threading;
 using System.Reflection;
+using System.Threading.Tasks;
+using System.Security;
+using System.Runtime.InteropServices;
+using MailSync.Properties;
+using System.Security.Cryptography;
 
 namespace MailSync
 {
@@ -23,12 +28,25 @@ namespace MailSync
         private string targetDirOutlook;
         private MrMapiConverter mapiMimeClass;
         private MailAdder ma;
+        private EASDialog eas;
+
+        private string syncKey = string.Empty;
+        private bool Error449 = false;
+        private bool Error401 = false;
+
+       
+        string user = string.Empty;
+        string Pass = null;
+       
+
+        
 
         private void RibbonOutlook_Load(object sender, RibbonUIEventArgs e)
         {
             string wersja = Globals.ThisAddIn.Application.Version;
             btnImport.Enabled = false;
             
+     
         }
 
 
@@ -48,7 +66,7 @@ namespace MailSync
             EnumerateFoldersInDefaultStore();
             if(lstOutlookDirs.Count>=1)
             {
-                FolderDecision fd = new FolderDecision(lstOutlookDirs);
+                FolderDecision fd = new FolderDecision(lstOutlookDirs,false);
                 DialogResult dr = fd.ShowDialog();
                 if(!string.IsNullOrEmpty(fd.SelectedFolder))
                 {
@@ -59,6 +77,7 @@ namespace MailSync
                         btnDirectory.Enabled = false;
                         btnHelp.Enabled = false;
                         btnClean.Enabled = false;
+                        btnConfig.Enabled = false;
 
                         BackgroundWorker bwAdd = new BackgroundWorker();
                         bwAdd.DoWork+=bwAdd_DoWork;
@@ -80,6 +99,7 @@ namespace MailSync
             btnImport.Enabled = true;
             btnHelp.Enabled = true;
             btnClean.Enabled = true;
+            btnConfig.Enabled = true;
             if(e.Error!=null)
             {
                 lblTotal.Label = rm.GetString("lblTotalGenericErrorRes") + e.Error.Message;
@@ -129,10 +149,11 @@ namespace MailSync
                     bool result = GetMailFolder();
                     if (result)
                     {
-                        //set path to folder with attachments
-                        pathWithAttachmentsAfter = pathAfter.Replace("\\Indexed", "");
-                        pathWithAttachmentsAfter = pathWithAttachmentsAfter.Replace("Mail\\15", "Att");
-
+                //set path to folder with attachments
+                //pathWithAttachmentsAfter = pathAfter.Replace("\\Indexed", "");
+                //pathWithAttachmentsAfter = pathWithAttachmentsAfter.Replace("Mail\\15", "Att");
+                        pathWithAttachmentsAfter = string.Empty;
+                                                
                         BackgroundWorker bw = new BackgroundWorker();
                         bw.DoWork += bw_DoWork;
                         bw.RunWorkerCompleted += bw_RunWorkerCompleted;
@@ -140,7 +161,7 @@ namespace MailSync
                         btnDirectory.Enabled = false;
                         btnHelp.Enabled = false;
                         btnClean.Enabled = false;
-                
+                        btnConfig.Enabled = false;
 
                         bw.RunWorkerAsync();
                     }
@@ -154,6 +175,7 @@ namespace MailSync
                     btnDirectory.Enabled = true;
                     btnHelp.Enabled = true;
                     btnClean.Enabled = true;
+                    btnConfig.Enabled = true;
                     if(e.Error==null&&(bool)e.Result==true)
                     {
                 
@@ -233,7 +255,8 @@ namespace MailSync
 
                 private bool GetMailFolder()
                 {
-                    string path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Packages\\microsoft.windowscommunicationsapps_8wekyb3d8bbwe\\LocalState\\Indexed\\LiveComm";
+                    //string path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Packages\\microsoft.windowscommunicationsapps_8wekyb3d8bbwe\\LocalState\\Indexed\\LiveComm";
+                    string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Mailbox";
                     FolderBrowserDialog fbd = new FolderBrowserDialog();
                     fbd.ShowNewFolderButton = false;
                     if (Directory.Exists(path))
@@ -241,6 +264,13 @@ namespace MailSync
                         string sciezkaInside = FindMimeMailsInside(path);
                         fbd.SelectedPath = sciezkaInside;
                     }
+                    else
+                    {
+                        Directory.CreateDirectory(path);
+                        string sciezkaInside = FindMimeMailsInside(path);
+                        fbd.SelectedPath = sciezkaInside;
+                    }
+
 
                     DialogResult dr = fbd.ShowDialog();
                     if (dr == DialogResult.OK)
@@ -275,6 +305,7 @@ namespace MailSync
                 btnImport.Enabled = false;
                 btnDirectory.Enabled = false;
                 btnHelp.Enabled = false;
+                btnConfig.Enabled = false;
                 bwKasowanie.RunWorkerAsync();
             }
             else
@@ -300,6 +331,7 @@ namespace MailSync
             btnImport.Enabled = false;
             btnDirectory.Enabled = true;
             btnHelp.Enabled = true;
+            btnConfig.Enabled = true;
             if(e.Error!=null)
             {
                 mapiMime_TotalNumberOfFilesEventEvent(rm.GetString("lblTotalErrorDeletingRes") +e.Error.Message);
@@ -328,11 +360,11 @@ namespace MailSync
             md.ConvertedFilesNumberEvent += md_ConvertedFilesNumberEvent;
             if (ma != null && ma.LstFDMi != null && ma.LstFDMi.Count > 0)
             {
-                e.Result = md.CleanFolderMapiFiles(ma.LstFDMi);
+                e.Result = md.CleanFolderMapiMimeFiles(ma.LstFDMi);
             }
             else
             {
-                e.Result = md.CleanFolderMapiFiles();
+                e.Result = md.CleanFolderMapiMimeFiles();
             }
         }
 
@@ -369,6 +401,152 @@ namespace MailSync
                 Help.ShowHelp(new Form(), ClickOnceLocation+"\\help_mailsync.chm");
             }
         }
+        #endregion
+
+        #region syncing
+        private void btnSync_Click(object sender, RibbonControlEventArgs e)
+        {
+            if (string.IsNullOrEmpty(Settings.Default.EASServer) || string.IsNullOrEmpty(Settings.Default.ProtocolVersion))
+            {
+                SettingsForm sf = new SettingsForm();
+                sf.ShowDialog();
+            }
+
+            if (!string.IsNullOrEmpty(Settings.Default.EASServer) && !string.IsNullOrEmpty(Settings.Default.ProtocolVersion)&& !string.IsNullOrEmpty(Settings.Default.DevID))
+            {
+                btnImport.Enabled = false;
+                btnDirectory.Enabled = false;
+                btnHelp.Enabled = false;
+                btnClean.Enabled = false;
+                btnConfig.Enabled = false;
+
+                DialogResult dr = DialogResult.OK;
+                if (string.IsNullOrEmpty(Settings.Default.Username)||string.IsNullOrEmpty(Settings.Default.Password) || Error401)
+                {
+                    Credentials cred = new Credentials();
+                    cred.GetCredentials(rm.GetString("credTitle"), rm.GetString("credMessage"), ref user, ref Pass);
+
+
+                    if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(Pass))
+                    {
+                        dr = DialogResult.No;
+                    }
+                    else
+                    {
+                        Settings.Default.Username = user;
+                        Settings.Default.Password = UTF8Encoding.Default.GetString(ProtectedData.Protect(UTF8Encoding.Default.GetBytes(Pass), null, DataProtectionScope.CurrentUser));
+                    }
+                                      
+                }
+
+                if (dr == DialogResult.OK)
+                {
+
+                    eas = new EASDialog(rm, Settings.Default.Username, UTF8Encoding.Default.GetString(ProtectedData.Unprotect(UTF8Encoding.Default.GetBytes(Settings.Default.Password),null,DataProtectionScope.CurrentUser)), Settings.Default.EASServer, Settings.Default.ProtocolVersion, Settings.Default.DevID,Settings.Default.DevType);
+                    eas.TotalNumberOfFilesEvent += md_TotalNumberOfFilesEvent;
+                    eas.NewFilesNumberEvent += md_NewFilesNumberEvent;
+                    eas.ConvertedFilesNumberEvent += md_ConvertedFilesNumberEvent;
+                    string kom = string.Empty;
+
+                    bool result = eas.Initialize(ref kom);
+                    if (result)
+                    {
+                        BackgroundWorker bwOnline = new BackgroundWorker();
+
+                        bwOnline.DoWork += BwOnline_DoWork;
+                        bwOnline.RunWorkerCompleted += BwOnline_RunWorkerCompleted;
+                        bwOnline.RunWorkerAsync();
+                    }
+                }
+                else
+                {
+                    btnImport.Enabled = true;
+                    btnDirectory.Enabled = true;
+                    btnHelp.Enabled = true;
+                    btnClean.Enabled = true;
+                    btnConfig.Enabled = true;
+                }
+            }
+            else
+            {
+                MessageBox.Show(rm.GetString("settingsMess"));
+            }
+        }
+
+        private void BwOnline_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            btnClean.Enabled = true;
+            btnImport.Enabled = false;
+            btnDirectory.Enabled = true;
+            btnHelp.Enabled = true;
+            btnConfig.Enabled = true;
+            if (e.Error != null)
+            {
+                if (e.Error.Message.Contains("449"))
+                {
+                    mapiMime_ConvertedFilesNumberEvent(rm.GetString("strSyncProvision"));
+                    Error449 = true;
+                }
+                else if (e.Error.Message.Contains("401"))
+                {
+                    mapiMime_ConvertedFilesNumberEvent(rm.GetString("strSyncWrongUserPass"));
+                    Error401 = true;
+                }
+                else
+                {
+                    mapiMime_ConvertedFilesNumberEvent(e.Error.Message);
+                }
+            }
+            else
+            {
+                Error401 = false;
+                Error449 = false;
+                Settings.Default.SyncKey = syncKey;
+                Settings.Default.Save();
+            }
+        }
+
+        private void BwOnline_DoWork(object sender, DoWorkEventArgs e)
+        {
+            
+            string kom = string.Empty;
+            if (Error449||string.IsNullOrEmpty(syncKey))
+            {
+                //error viewing inside
+                bool res = eas.SetConnection(ref syncKey, ref kom);
+                if(res)
+                {
+                    Error449 = false;
+                    e.Result = eas.SetConversation(syncKey, "0", ref kom);
+                }
+                else
+                {
+                    throw new Exception(kom);
+                }
+
+            }
+            else
+            {
+                e.Result = eas.SetConversation(syncKey,"0", ref kom);
+            }
+            if(!(bool)e.Result)
+            {
+                
+                //jezeli provision wykonaj provisioning
+                throw new Exception(kom);
+            }
+        }
+
+        #endregion
+
+        #region Config
+
+        private void btnConfig_Click(object sender, RibbonControlEventArgs e)
+        {
+            SettingsForm sf = new SettingsForm();
+            sf.ShowDialog();
+        }
+
         #endregion
 
     }

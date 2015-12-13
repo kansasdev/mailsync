@@ -207,4 +207,79 @@
   <data name="tabSyncLabelRes" xml:space="preserve">
     <value>POCZTA SYNCHRO</value>
   </data>
+  <data name="btnSyncLabelRes" xml:space="preserve">
+    <value>SYNCHRONIZUJ ONLINE</value>
+  </data>
+  <data name="strEmailsDownloaded" xml:space="preserve">
+    <value> MAIL POBRANY</value>
+  </data>
+  <data name="strEmailsToSync" xml:space="preserve">
+    <value> MAILI NA SERWERZE</value>
+  </data>
+  <data name="credInitialUserName" xml:space="preserve">
+    <value>username</value>
+  </data>
+  <data name="credMessage" xml:space="preserve">
+    <value>Podaj użytkownika i hasło do poczty</value>
+  </data>
+  <data name="credTitle" xml:space="preserve">
+    <value>Zaloguj się do serwera EAS</value>
+  </data>
+  <data name="strSyncProvision" xml:space="preserve">
+    <value>Błąd synchronizacji, zostanie ustawiony tryb pełny, spróbuj ponownie</value>
+  </data>
+  <data name="strSyncWrongUserPass" xml:space="preserve">
+    <value>Nieprawidłowa nazwa użytkownika lub/i hasło</value>
+  </data>
+  <data name="remoteFolderErrToSync" xml:space="preserve">
+    <value>Nie wybrałeś zdalnego katalogu do synchronizacji</value>
+  </data>
+  <data name="cmbTextChooseOption" xml:space="preserve">
+    <value>Wskaż liczbę dni do synchronizacji</value>
+  </data>
+  <data name="lblChooseOption" xml:space="preserve">
+    <value>Wskaż odpowiedni katalog</value>
+  </data>
+  <data name="strWipeReq" xml:space="preserve">
+    <value>Wywołana metodę wyczyszczenia poczty, spróbuj ponownej synchronizacji</value>
+  </data>
+  <data name="settingsBtnCancel" xml:space="preserve">
+    <value>ANULUJ</value>
+  </data>
+  <data name="settingsBtnOK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="settingsChkUnblock" xml:space="preserve">
+    <value>BLOKADA</value>
+  </data>
+  <data name="settingsLblDevice" xml:space="preserve">
+    <value>URZĄDZENIE</value>
+  </data>
+  <data name="settingsLblProtocol" xml:space="preserve">
+    <value>PROTOKÓŁ</value>
+  </data>
+  <data name="settingsLblServer" xml:space="preserve">
+    <value>SERWER</value>
+  </data>
+  <data name="settingsLblUsername" xml:space="preserve">
+    <value>UŻYTKOWNIK</value>
+  </data>
+  <data name="settingsMess" xml:space="preserve">
+    <value>Niekompletne informacje konfiguracyjne: adres serwera i protokół</value>
+  </data>
+  <data name="settingsTitle" xml:space="preserve">
+    <value>Ustawienia Wtyczki</value>
+  </data>
+  <data name="btnConfigLabelRes" xml:space="preserve">
+    <value>KONFIGURACJA</value>
+  </data>
+  <data name="tooltipCheckboxSettings" xml:space="preserve">
+    <value>Zmieniaj tylko w przypadku błędów, w przeciwnym wypadku Twoje konto pocztowe będzie mieć skojarzone wiele urządzeń</value>
+  </data>
+  <data name="tooltipProtocolSettings" xml:space="preserve">
+    <value>Wersja protokołu w postaci np. 14</value>
+  </data>
+  <data name="tooltipServerSettings" xml:space="preserve">
+    <value>Adres w postaci serwer.eas.pl</value>
+  </data>
 </root>
