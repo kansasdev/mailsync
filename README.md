@@ -6,5 +6,5 @@ Mail Sync uses mrmapi(MFCMAPI) component (in binary form) for MIME to MAPI conve
 licensed also under Microsoft Public License - you can find mfcmapi on https://mfcmapi.codeplex.com/
 
 From version 1.5.0.0, after huge project reorganization, there is also dependent library added:
-MIMEKit Lite copyright Xamarin Inc. has been added (https://www.nuget.org/packages/MimeKitLite/)
+MIMEKit Lite copyright Xamarin Inc. (https://www.nuget.org/packages/MimeKitLite/)
 
