@@ -53,7 +53,10 @@ namespace MailSync
         #region Mail Importing
         private void btnImport_Click(object sender, RibbonControlEventArgs e)
         {
-                        
+
+            lblConverted.Label = "";
+            lblNew.Label = "";
+            lblTotal.Label = "";        
             if(mapiMimeClass!=null&&mapiMimeClass.LstMapi!=null)
             {
                 if(mapiMimeClass.LstMapi.Count>=500)
@@ -146,7 +149,10 @@ namespace MailSync
         #region Directory Operations
         private void btnDirectory_Click(object sender, RibbonControlEventArgs e)
                 {
-                    bool result = GetMailFolder();
+            lblConverted.Label = "";
+            lblNew.Label = "";
+            lblTotal.Label = "";
+            bool result = GetMailFolder();
                     if (result)
                     {
                 //set path to folder with attachments
@@ -296,6 +302,9 @@ namespace MailSync
         #region Directory Cleaning
         private void btnClean_Click(object sender, RibbonControlEventArgs e)
         {
+            lblConverted.Label = "";
+            lblNew.Label = "";
+            lblTotal.Label = "";
             if (!string.IsNullOrEmpty(pathAfter))
             {
                 BackgroundWorker bwKasowanie = new BackgroundWorker();
@@ -406,6 +415,9 @@ namespace MailSync
         #region syncing
         private void btnSync_Click(object sender, RibbonControlEventArgs e)
         {
+            lblConverted.Label = "";
+            lblNew.Label = "";
+            lblTotal.Label = "";
             if (string.IsNullOrEmpty(Settings.Default.EASServer) || string.IsNullOrEmpty(Settings.Default.ProtocolVersion))
             {
                 SettingsForm sf = new SettingsForm();
