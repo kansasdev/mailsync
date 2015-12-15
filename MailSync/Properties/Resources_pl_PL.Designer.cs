@@ -484,6 +484,15 @@ namespace MailSync.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wskazany katalog lokalny nie zawiera maili.
+        /// </summary>
+        internal static string strNoEmlInside {
+            get {
+                return ResourceManager.GetString("strNoEmlInside", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SORTUJĘ ELEMENT NUMER.
         /// </summary>
         internal static string strSortElementNumberRes {

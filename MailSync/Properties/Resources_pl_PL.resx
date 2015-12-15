@@ -282,4 +282,7 @@
   <data name="tooltipServerSettings" xml:space="preserve">
     <value>Adres w postaci serwer.eas.pl</value>
   </data>
+  <data name="strNoEmlInside" xml:space="preserve">
+    <value>Wskazany katalog lokalny nie zawiera maili</value>
+  </data>
 </root>

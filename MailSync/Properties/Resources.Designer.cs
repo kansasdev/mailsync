@@ -484,6 +484,15 @@ namespace MailSync.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selected local folder doesn&apos;t contain email files.
+        /// </summary>
+        internal static string strNoEmlInside {
+            get {
+                return ResourceManager.GetString("strNoEmlInside", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SORTING ELEMENT NUMBER.
         /// </summary>
         internal static string strSortElementNumberRes {

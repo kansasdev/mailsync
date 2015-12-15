@@ -168,6 +168,7 @@ namespace MailSync
                         btnHelp.Enabled = false;
                         btnClean.Enabled = false;
                         btnConfig.Enabled = false;
+                        btnSync.Enabled = false;
 
                         bw.RunWorkerAsync();
                     }
@@ -182,6 +183,7 @@ namespace MailSync
                     btnHelp.Enabled = true;
                     btnClean.Enabled = true;
                     btnConfig.Enabled = true;
+                    btnSync.Enabled = true;
                     if(e.Error==null&&(bool)e.Result==true)
                     {
                 
@@ -265,29 +267,39 @@ namespace MailSync
                     string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Mailbox";
                     FolderBrowserDialog fbd = new FolderBrowserDialog();
                     fbd.ShowNewFolderButton = false;
+                    
                     if (Directory.Exists(path))
                     {
-                        string sciezkaInside = FindMimeMailsInside(path);
-                        fbd.SelectedPath = sciezkaInside;
+                        //string sciezkaInside = FindMimeMailsInside(path);
+                        //fbd.SelectedPath = sciezkaInside;
+                        if (eas != null && !string.IsNullOrEmpty(eas.mailDir))
+                        {
+                            fbd.SelectedPath = eas.mailDir;
+                        }
+                        else
+                        {
+                            fbd.SelectedPath = path;
+                        }
                     }
                     else
                     {
                         Directory.CreateDirectory(path);
-                        string sciezkaInside = FindMimeMailsInside(path);
-                        fbd.SelectedPath = sciezkaInside;
+                        //string sciezkaInside = FindMimeMailsInside(path);
+                        //fbd.SelectedPath = sciezkaInside;
+                        fbd.SelectedPath = path;
                     }
-
-
+                    
                     DialogResult dr = fbd.ShowDialog();
                     if (dr == DialogResult.OK)
                     {
                         pathAfter = fbd.SelectedPath;
-                        if (path != pathAfter)
+                        if (path != pathAfter && Directory.EnumerateFiles(pathAfter,"*.eml").Count()>0)
                         {
                             return true;
                         }
                         else
                         {
+                            lblTotal.Label = rm.GetString("strNoEmlInside");
                             return false;
                         }
                     }
@@ -328,6 +340,7 @@ namespace MailSync
                     btnImport.Enabled = false;
                     btnDirectory.Enabled = false;
                     btnHelp.Enabled = false;
+                    btnSync.Enabled = false;
                     bwDelete.RunWorkerAsync();
                 }
             }
@@ -340,6 +353,7 @@ namespace MailSync
             btnImport.Enabled = false;
             btnDirectory.Enabled = true;
             btnHelp.Enabled = true;
+            btnSync.Enabled = true;
             btnConfig.Enabled = true;
             if(e.Error!=null)
             {
@@ -530,6 +544,7 @@ namespace MailSync
                 {
                     Error449 = false;
                     e.Result = eas.SetConversation(syncKey, "0", ref kom);
+                    
                 }
                 else
                 {

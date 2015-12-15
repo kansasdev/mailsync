@@ -282,4 +282,7 @@
   <data name="tooltipServerSettings" xml:space="preserve">
     <value>Address for example server.eas.uk</value>
   </data>
+  <data name="strNoEmlInside" xml:space="preserve">
+    <value>Selected local folder doesn't contain email files</value>
+  </data>
 </root>

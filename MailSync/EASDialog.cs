@@ -23,7 +23,7 @@ namespace MailSync
         string protVer;
         string server;
         string username;
-        string mailDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Mailbox";
+        public string mailDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Mailbox";
 
         private ResourceManager _rm;
 
@@ -277,7 +277,7 @@ namespace MailSync
                                     {
                                         if (sccItem.Items[index].ToString() == folderToSync)
                                         {
-
+                                            EAS.generated.SyncResponseNamespace.SyncCollectionsCollectionCommands sccc=null;
                                             List<EAS.generated.SyncResponseNamespace.ItemsChoiceType7> lstSync = new List<EAS.generated.SyncResponseNamespace.ItemsChoiceType7>(sccItem.ItemsElementName);
                                             int indexCommand = lst.FindIndex(q => q == EAS.generated.SyncResponseNamespace.ItemsChoiceType7.Commands);
 
@@ -285,7 +285,7 @@ namespace MailSync
                                             {
                                                 if (sccItem.Items[indexCommand] is EAS.generated.SyncResponseNamespace.SyncCollectionsCollectionCommands)
                                                 {
-                                                    EAS.generated.SyncResponseNamespace.SyncCollectionsCollectionCommands sccc = (EAS.generated.SyncResponseNamespace.SyncCollectionsCollectionCommands)sccItem.Items[indexCommand];
+                                                    sccc = (EAS.generated.SyncResponseNamespace.SyncCollectionsCollectionCommands)sccItem.Items[indexCommand];
                                                     foreach (object o in sccc.Items)
                                                     {
                                                         if (o is EAS.generated.SyncResponseNamespace.SyncCollectionsCollectionCommandsAdd)
@@ -635,7 +635,7 @@ namespace MailSync
             StreamReader sr = new StreamReader(ms);
             string s = sr.ReadToEnd();
             //error with serialization options
-            if (syncKey != "0")
+            //if (syncKey != "0")
             {
                 s = s.Replace("<airsync:Options />", "<airsync:Options><airsync:FilterType>"+daysOption+"</airsync:FilterType></airsync:Options>");
             }
