@@ -127,7 +127,7 @@ namespace MailSync
             {
                 p.StartInfo.FileName = lokalizacja+"\\mrmapi_x64.exe";
             }
-            p.StartInfo.Arguments = string.Format("-Ma -i {0} -o {1} -Cc CCSF_SMTP", input, output);
+            p.StartInfo.Arguments = string.Format("-Ma -i \"{0}\" -o \"{1}\" -Cc CCSF_SMTP", input, output);
             p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
             p.Start();
             // Do not wait for the child process to exit before

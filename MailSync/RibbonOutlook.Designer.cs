@@ -24,6 +24,7 @@ namespace MailSync
 
 
             InitializeComponent();
+            
 
         }
 

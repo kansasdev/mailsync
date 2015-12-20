@@ -16,6 +16,7 @@ using System.Security;
 using System.Runtime.InteropServices;
 using MailSync.Properties;
 using System.Security.Cryptography;
+using System.Deployment.Application;
 
 namespace MailSync
 {
@@ -43,10 +44,17 @@ namespace MailSync
 
         private void RibbonOutlook_Load(object sender, RibbonUIEventArgs e)
         {
-            string wersja = Globals.ThisAddIn.Application.Version;
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                ApplicationDeployment applicationDeployment = ApplicationDeployment.CurrentDeployment;
+                Version version = applicationDeployment.CurrentVersion;
+                string wersja = String.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+                btnHelp.ScreenTip = wersja;
+            }
+           
             btnImport.Enabled = false;
-            
-     
+          
+
         }
 
 
@@ -327,6 +335,7 @@ namespace MailSync
                 btnDirectory.Enabled = false;
                 btnHelp.Enabled = false;
                 btnConfig.Enabled = false;
+                btnSync.Enabled = false;
                 bwKasowanie.RunWorkerAsync();
             }
             else
@@ -445,7 +454,7 @@ namespace MailSync
                 btnHelp.Enabled = false;
                 btnClean.Enabled = false;
                 btnConfig.Enabled = false;
-
+                btnSync.Enabled = false;
                 DialogResult dr = DialogResult.OK;
                 if (string.IsNullOrEmpty(Settings.Default.Username)||string.IsNullOrEmpty(Settings.Default.Password) || Error401)
                 {
@@ -491,6 +500,7 @@ namespace MailSync
                     btnHelp.Enabled = true;
                     btnClean.Enabled = true;
                     btnConfig.Enabled = true;
+                    btnSync.Enabled = true;
                 }
             }
             else
@@ -506,6 +516,7 @@ namespace MailSync
             btnDirectory.Enabled = true;
             btnHelp.Enabled = true;
             btnConfig.Enabled = true;
+            btnSync.Enabled = true;
             if (e.Error != null)
             {
                 if (e.Error.Message.Contains("449"))
