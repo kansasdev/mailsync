@@ -388,12 +388,13 @@ namespace MailSync
                             sw.Close();
                             ms.Close();
 
+                            
                             if (!string.IsNullOrEmpty(mm.HtmlBody))
                             {
                                 string body = mm.HtmlBody;
                                 string sContent = BitConverter.ToString(Encoding.UTF8.GetBytes(body));
 
-
+                                
                                 int idx = 0;
                                 do
                                 {
@@ -421,8 +422,8 @@ namespace MailSync
                                         idx++;
                                     }
                                 } while (idx != -1);
-
-
+                                
+                                
                                 string[] sArr = sContent.Split('-');
 
                                 byte[] bNew = new byte[sArr.Length];
@@ -448,6 +449,7 @@ namespace MailSync
                                 sw.Close();
                                 ms.Close();
                             }
+                            
                             mm.WriteTo(nazwaPlikuZKatalogiem + ".eml");
                             OnNewFilesNumberEvent(string.Format("{0} {1}", fileNo, _rm.GetString("strEmailsDownloaded")));
                             fileNo++;

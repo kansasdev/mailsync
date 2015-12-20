@@ -123,19 +123,13 @@ namespace MailSync
 
         void bwAdd_DoWork(object sender, DoWorkEventArgs e)
         {
-            //null check earlier
-            if (ma == null)
-            {
-                ma = new MailAdder(mapiMimeClass.LstMapi, targetDirOutlook, this.App, pathWithAttachmentsAfter,rm);
-                ma.TotalNumberOfFilesEvent += ma_TotalNumberOfFilesEvent;
-                ma.NewFilesNumberEvent += ma_NumberOfNewFilesEvent;
-                ma.ConvertedFilesNumberEvent += ma_ConvertedNumberEvent;
-                ma.AddMailsToFolder();
-            }
-            else
-            {
-                ma.AddMailsToFolder();
-            }
+           
+           ma = new MailAdder(mapiMimeClass.LstMapi, targetDirOutlook, this.App, pathWithAttachmentsAfter,rm);
+           ma.TotalNumberOfFilesEvent += ma_TotalNumberOfFilesEvent;
+           ma.NewFilesNumberEvent += ma_NumberOfNewFilesEvent;
+           ma.ConvertedFilesNumberEvent += ma_ConvertedNumberEvent;
+           ma.AddMailsToFolder();
+           
         }
 
         void ma_ConvertedNumberEvent(string obj)

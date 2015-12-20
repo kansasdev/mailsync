@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Resources;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -97,22 +98,32 @@ namespace MailSync
                 FileDateMI fdm = LstFDMi.Where(q => q.FileName == fName).FirstOrDefault();
                 if (fdm == null)
                 {
+                    Outlook.MailItem mi = null;
                     try
                     {
-                        Outlook.MailItem mi = (Outlook.MailItem)app.Session.OpenSharedItem(path);
+
+                        mi = (Outlook.MailItem)app.Session.OpenSharedItem(path);
+                        //sharing violation fix, encoding bug :/
+                                                                                                                   
+
+                        // CreateItemFromTemplate(path);
                         FileInfo fi = new FileInfo(path);
                         LstFDMi.Add(new FileDateMI() { MI = mi, Tick = mi.ReceivedTime.Ticks, ReceivedTime = mi.ReceivedTime, FileName = fName });
-
+                        mi.Move(choosenFolder);
+                        //Outlook.MAPIFolder mf = (Outlook.MAPIFolder)app.Session.OpenSharedFolder(choosenFolder);
+                        
+                        Marshal.ReleaseComObject(mi);
                         OnTotalNumberOfFilesEvent(_rm.GetString("strSortElementNumberRes") + " " + sortedNumber.ToString());
                     }
                     catch(Exception ex)
                     {
-                        MessageBox.Show(path+Environment.NewLine+_rm.GetString("sharingViolationError"));
+                        //MessageBox.Show(path+Environment.NewLine+_rm.GetString("sharingViolationError"));
                     }
+                   
                 }
                 
             }
-
+            /*
             LstFDMi = LstFDMi.OrderByDescending(q => q.Tick).ToList();
             
             //find oldest newest
@@ -132,21 +143,9 @@ namespace MailSync
 
                 if (!IsDuplicate(lstMiToSearch,mi))
                 {
-                    if(mi.Attachments!=null&&mi.Attachments.Count>0)
-                    {
-                        /* //NOT NEEDED
-                        for (int i = 1; i<= mi.Attachments.Count; i++)
-                        {
-                           string file = FindProperAttachment(fdmi.FileName, mi.Attachments[i].FileName,pathToDirWithAttachments);
-                            if(!string.IsNullOrEmpty(file))
-                            {
-                                mi.Attachments.Remove(i);
-                                mi.Attachments.Add(file);
-                            }
-
-                        }*/
-                    }
+                   
                     mi.Move(choosenFolder);
+                    Marshal.ReleaseComObject(mi);
                     OnNewFilesNumberEvent(string.Format("{0} {1}", addedNumber.ToString(), _rm.GetString("strNewEmailsInsideOutlookDirRes")));
                     OnConvertedFilesNumberEvent(string.Format("{0} {1}", howManyFilesInsideDir + addedNumber,_rm.GetString("strEmailsInsideChoosenOutlookDirRes")));
                 }
@@ -155,7 +154,7 @@ namespace MailSync
                     duplicateNumber++;
                     OnTotalNumberOfFilesEvent(string.Format("{0} {1}", duplicateNumber,_rm.GetString("strDuplicatesInsideDirectoryRes")));
                 }
-            }
+            }*/
 
            
         }
