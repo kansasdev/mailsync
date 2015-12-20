@@ -43,7 +43,7 @@
     <PublishUrl>C:\Users\Michal\Documents\Visual Studio 2013\Projects\MailSyncSln\download\</PublishUrl>
     <InstallUrl>https://raw.githubusercontent.com/kansasdev/mailsync/master/download/</InstallUrl>
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.5.0.3</ApplicationVersion>
+    <ApplicationVersion>1.5.0.4</ApplicationVersion>
     <AutoIncrementApplicationRevision>false</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>0</UpdateInterval>
@@ -52,7 +52,7 @@
     <PublisherName>Kansas</PublisherName>
     <SupportUrl>https://github.com/kansasdev/mailsync/wiki</SupportUrl>
     <FriendlyName>Mail Sync</FriendlyName>
-    <OfficeApplicationDescription>Program for syncing mails between Windows Mail and Outlook</OfficeApplicationDescription>
+    <OfficeApplicationDescription>Program for syncing mails between Active Sync accounts and Outlook</OfficeApplicationDescription>
     <LoadBehavior>3</LoadBehavior>
   </PropertyGroup>
   <ItemGroup>
