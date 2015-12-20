@@ -285,4 +285,7 @@
   <data name="strNoEmlInside" xml:space="preserve">
     <value>Wskazany katalog lokalny nie zawiera maili</value>
   </data>
+  <data name="sharingViolationError" xml:space="preserve">
+    <value>Błąd współdzielenia, spróbuj zrestartować Outlook</value>
+  </data>
 </root>

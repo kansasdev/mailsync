@@ -376,6 +376,15 @@ namespace MailSync.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sharing violation error, try restart Outlook.
+        /// </summary>
+        internal static string sharingViolationError {
+            get {
+                return ResourceManager.GetString("sharingViolationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  DELETING FILE .
         /// </summary>
         internal static string strDeletingFileRes {

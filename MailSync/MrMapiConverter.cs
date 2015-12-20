@@ -136,6 +136,7 @@ namespace MailSync
             // Read the output stream first and then wait.
             string outputConsole = p.StandardOutput.ReadToEnd();
             p.WaitForExit();
+            p.Close();
             return outputConsole;
 
         }

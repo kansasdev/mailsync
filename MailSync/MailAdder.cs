@@ -6,6 +6,7 @@ using System.Linq;
 using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Outlook = Microsoft.Office.Interop.Outlook;
 
 namespace MailSync
@@ -96,11 +97,18 @@ namespace MailSync
                 FileDateMI fdm = LstFDMi.Where(q => q.FileName == fName).FirstOrDefault();
                 if (fdm == null)
                 {
-                    Outlook.MailItem mi = (Outlook.MailItem)app.Session.OpenSharedItem(path);
-                    FileInfo fi = new FileInfo(path);
-                    LstFDMi.Add(new FileDateMI() { MI = mi, Tick = mi.ReceivedTime.Ticks,ReceivedTime = mi.ReceivedTime, FileName = fName });
-                   
-                    OnTotalNumberOfFilesEvent(_rm.GetString("strSortElementNumberRes")+" "+ sortedNumber.ToString());
+                    try
+                    {
+                        Outlook.MailItem mi = (Outlook.MailItem)app.Session.OpenSharedItem(path);
+                        FileInfo fi = new FileInfo(path);
+                        LstFDMi.Add(new FileDateMI() { MI = mi, Tick = mi.ReceivedTime.Ticks, ReceivedTime = mi.ReceivedTime, FileName = fName });
+
+                        OnTotalNumberOfFilesEvent(_rm.GetString("strSortElementNumberRes") + " " + sortedNumber.ToString());
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show(path+Environment.NewLine+_rm.GetString("sharingViolationError"));
+                    }
                 }
                 
             }

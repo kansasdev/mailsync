@@ -376,6 +376,15 @@ namespace MailSync.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Błąd współdzielenia, spróbuj zrestartować Outlook.
+        /// </summary>
+        internal static string sharingViolationError {
+            get {
+                return ResourceManager.GetString("sharingViolationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to KASUJĘ PLIK.
         /// </summary>
         internal static string strDeletingFileRes {

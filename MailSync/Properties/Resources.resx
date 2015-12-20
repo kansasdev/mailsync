@@ -285,4 +285,7 @@
   <data name="strNoEmlInside" xml:space="preserve">
     <value>Selected local folder doesn't contain email files</value>
   </data>
+  <data name="sharingViolationError" xml:space="preserve">
+    <value>Sharing violation error, try restart Outlook</value>
+  </data>
 </root>
