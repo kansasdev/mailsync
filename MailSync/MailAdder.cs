@@ -86,77 +86,35 @@ namespace MailSync
             
             int addedNumber=0;
             int duplicateNumber = 0;
-                    
-
-            int sortedNumber = 0;
-
-            
-            foreach (string path in lstMAPI)
-            {
-                sortedNumber++;
-                string fName = path.Substring(path.LastIndexOf("\\")+1,(path.Length-(path.LastIndexOf("\\")+1)));
-                FileDateMI fdm = LstFDMi.Where(q => q.FileName == fName).FirstOrDefault();
-                if (fdm == null)
-                {
-                    Outlook.MailItem mi = null;
-                    try
-                    {
-
-                        mi = (Outlook.MailItem)app.Session.OpenSharedItem(path);
-                        //sharing violation fix, encoding bug :/
-                                                                                                                   
-
-                        // CreateItemFromTemplate(path);
-                        FileInfo fi = new FileInfo(path);
-                        LstFDMi.Add(new FileDateMI() { MI = mi, Tick = mi.ReceivedTime.Ticks, ReceivedTime = mi.ReceivedTime, FileName = fName });
-                        mi.Move(choosenFolder);
-                        //Outlook.MAPIFolder mf = (Outlook.MAPIFolder)app.Session.OpenSharedFolder(choosenFolder);
                         
-                        Marshal.ReleaseComObject(mi);
-                        OnTotalNumberOfFilesEvent(_rm.GetString("strSortElementNumberRes") + " " + sortedNumber.ToString());
-                    }
-                    catch(Exception ex)
-                    {
-                        //MessageBox.Show(path+Environment.NewLine+_rm.GetString("sharingViolationError"));
-                    }
-                   
-                }
-                
-            }
-            /*
-            LstFDMi = LstFDMi.OrderByDescending(q => q.Tick).ToList();
-            
-            //find oldest newest
-            FileDateMI FDMiMin = LstFDMi.LastOrDefault();
-            FileDateMI FDMiMax = LstFDMi.FirstOrDefault();
-
-            DateTime dtMin = FDMiMin.ReceivedTime;
-            DateTime dtMax = FDMiMax.ReceivedTime;
-
-            List<Outlook.MailItem> lstMiToSearch = SetSelection(dtMin, dtMax);
-
-            foreach(FileDateMI fdmi in LstFDMi)
+            List<string> lstForAdd = new List<string>(lstMAPI);
+            foreach(Outlook.MailItem mi in choosenFolder.Items)
             {
-                addedNumber++;
+                const string internetMessageIdWTag = "http://schemas.microsoft.com/mapi/proptag/0x1035001F";
+                string idMess = mi.PropertyAccessor.GetProperty(internetMessageIdWTag);
 
-                Outlook.MailItem mi = fdmi.MI;
-
-                if (!IsDuplicate(lstMiToSearch,mi))
+                string result = lstMAPI.Find(q => q.EndsWith(idMess.Replace(":", "") + ".msg"));
+                if(!string.IsNullOrEmpty(result))
                 {
-                   
-                    mi.Move(choosenFolder);
-                    Marshal.ReleaseComObject(mi);
-                    OnNewFilesNumberEvent(string.Format("{0} {1}", addedNumber.ToString(), _rm.GetString("strNewEmailsInsideOutlookDirRes")));
-                    OnConvertedFilesNumberEvent(string.Format("{0} {1}", howManyFilesInsideDir + addedNumber,_rm.GetString("strEmailsInsideChoosenOutlookDirRes")));
-                }
-                else
-                {
+                    lstForAdd.Remove(result);
                     duplicateNumber++;
-                    OnTotalNumberOfFilesEvent(string.Format("{0} {1}", duplicateNumber,_rm.GetString("strDuplicatesInsideDirectoryRes")));
+                    OnTotalNumberOfFilesEvent(string.Format("{0} {1}", duplicateNumber, _rm.GetString("strDuplicatesInsideDirectoryRes")));
                 }
-            }*/
+                Marshal.ReleaseComObject(mi);
+            }
 
-           
+            foreach(string path in lstForAdd)
+            {
+                Outlook.MailItem mi = null;
+
+                mi = (Outlook.MailItem)app.Session.OpenSharedItem(path);
+                mi.Move(choosenFolder);
+                addedNumber++;
+                OnNewFilesNumberEvent(string.Format("{0} {1}", addedNumber.ToString(), _rm.GetString("strNewEmailsInsideOutlookDirRes")));
+                OnConvertedFilesNumberEvent(string.Format("{0} {1}", howManyFilesInsideDir + addedNumber, _rm.GetString("strEmailsInsideChoosenOutlookDirRes")));
+                Marshal.ReleaseComObject(mi);
+            }
+
         }
 
         private bool IsDuplicate(List<Outlook.MailItem> lstMi, Outlook.MailItem mi)
