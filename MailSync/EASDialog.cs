@@ -321,8 +321,11 @@ namespace MailSync
                                 }
                             }
                         }
-                        
-                    }
+                   }
+                   else
+                   {
+                       _rm.GetString("lblTotalGenericErrorRes");
+                   }
                 }
                 while (continuingLoop);
 
@@ -705,18 +708,29 @@ namespace MailSync
 
         private EAS.generated.SyncResponseNamespace.Sync GetSyncObjectFromXML(string x)
         {
-            MemoryStream streamOut = new MemoryStream();
-            StreamWriter writer = new StreamWriter(streamOut);
-            writer.Write(x);
-            writer.Flush();
-            streamOut.Position = 0;
 
-            XmlSerializer deser = new XmlSerializer(typeof(EAS.generated.SyncResponseNamespace.Sync));
-            EAS.generated.SyncResponseNamespace.Sync sync = (EAS.generated.SyncResponseNamespace.Sync)deser.Deserialize(streamOut);
-            //SyncCollectionsCollectionResponsesFetchApplicationData 
-            //[System.Xml.Serialization.XmlElementAttribute("Attachments", typeof(Attachments[]), Namespace = "AirSyncBase")] //ZMIANA Z Attachments na Attachments[]
+            try
+            {
+                MemoryStream streamOut = new MemoryStream();
+                StreamWriter writer = new StreamWriter(streamOut);
+                writer.Write(x);
+                writer.Flush();
+                streamOut.Position = 0;
 
-            return sync;
+                XmlSerializer deser = new XmlSerializer(typeof(EAS.generated.SyncResponseNamespace.Sync));
+                EAS.generated.SyncResponseNamespace.Sync sync = (EAS.generated.SyncResponseNamespace.Sync)deser.Deserialize(streamOut);
+                //SyncCollectionsCollectionResponsesFetchApplicationData 
+                //[System.Xml.Serialization.XmlElementAttribute("Attachments", typeof(Attachments[]), Namespace = "AirSyncBase")] //ZMIANA Z Attachments na Attachments[]
+                return sync;
+            }
+            catch(Exception ex)
+            {
+                List<string> lstError = new List<string>();
+                lstError.Add(ex.Message);
+                lstError.Add(x);
+                File.WriteAllLines(mailDir + "\\" + DateTime.Now.Ticks + ".txt", lstError);
+                return null;
+            }
         }
 
         private string SetFetchDataObjectAsXml(string collectionid, string serverid, bool useMIME)
