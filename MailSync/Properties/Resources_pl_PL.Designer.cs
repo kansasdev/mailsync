@@ -178,6 +178,15 @@ namespace MailSync.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Błąd podczas deserializacji, sprawdź katalog wyjściowy i przejrzyj pliki tekstowe. Kliknij OK, aby kontynuować.
+        /// </summary>
+        internal static string errSerialization {
+            get {
+                return ResourceManager.GetString("errSerialization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bład: .
         /// </summary>
         internal static string GenericErrorRes {

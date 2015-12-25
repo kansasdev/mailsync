@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailSync", "MailSync\MailSync.csproj", "{C5AA3166-45CE-432B-BCA3-1FDA63C50D94}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AcceptLicCA", "AcceptLicCA\AcceptLicCA.csproj", "{AC791D9E-4ECE-4749-9C45-EDB68C64EE62}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EAS", "EAS\EAS.csproj", "{42CD5B32-962C-48FE-BCDB-16C5F1B15D97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestEAS", "TestEAS\TestEAS.csproj", "{26DF1C89-58B7-44BC-AB11-A7DB50EF3507}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,18 @@ Global
 		{42CD5B32-962C-48FE-BCDB-16C5F1B15D97}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{42CD5B32-962C-48FE-BCDB-16C5F1B15D97}.Release|Win32.ActiveCfg = Release|Any CPU
 		{42CD5B32-962C-48FE-BCDB-16C5F1B15D97}.Release|Win32.Build.0 = Release|Any CPU
+		{26DF1C89-58B7-44BC-AB11-A7DB50EF3507}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26DF1C89-58B7-44BC-AB11-A7DB50EF3507}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26DF1C89-58B7-44BC-AB11-A7DB50EF3507}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{26DF1C89-58B7-44BC-AB11-A7DB50EF3507}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{26DF1C89-58B7-44BC-AB11-A7DB50EF3507}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{26DF1C89-58B7-44BC-AB11-A7DB50EF3507}.Debug|Win32.Build.0 = Debug|Any CPU
+		{26DF1C89-58B7-44BC-AB11-A7DB50EF3507}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26DF1C89-58B7-44BC-AB11-A7DB50EF3507}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26DF1C89-58B7-44BC-AB11-A7DB50EF3507}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{26DF1C89-58B7-44BC-AB11-A7DB50EF3507}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{26DF1C89-58B7-44BC-AB11-A7DB50EF3507}.Release|Win32.ActiveCfg = Release|Any CPU
+		{26DF1C89-58B7-44BC-AB11-A7DB50EF3507}.Release|Win32.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

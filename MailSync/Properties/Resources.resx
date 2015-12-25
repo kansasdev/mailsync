@@ -288,4 +288,7 @@
   <data name="sharingViolationError" xml:space="preserve">
     <value>Sharing violation error, try restart Outlook</value>
   </data>
+  <data name="errSerialization" xml:space="preserve">
+    <value>Error during deserialization, check output directory for text files. Click OK to continue</value>
+  </data>
 </root>

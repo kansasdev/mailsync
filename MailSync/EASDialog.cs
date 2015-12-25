@@ -10,6 +10,7 @@ using System.IO;
 using System.Resources;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Windows.Forms;
 
 namespace MailSync
 {
@@ -324,7 +325,7 @@ namespace MailSync
                    }
                    else
                    {
-                       _rm.GetString("lblTotalGenericErrorRes");
+                        MessageBox.Show(_rm.GetString("errSerialization"));
                    }
                 }
                 while (continuingLoop);
@@ -458,6 +459,10 @@ namespace MailSync
                             fileNo++;
                         }
 
+                    }
+                    else
+                    {
+                        MessageBox.Show(_rm.GetString("errSerialization"));
                     }
                 }
 
@@ -711,14 +716,11 @@ namespace MailSync
 
             try
             {
-                MemoryStream streamOut = new MemoryStream();
-                StreamWriter writer = new StreamWriter(streamOut);
-                writer.Write(x);
-                writer.Flush();
-                streamOut.Position = 0;
+                XmlReaderSettings xmlReaderSettings = new XmlReaderSettings() { CheckCharacters = false };
+                XmlReader xmlReader = XmlTextReader.Create(new StringReader(x), xmlReaderSettings);
 
                 XmlSerializer deser = new XmlSerializer(typeof(EAS.generated.SyncResponseNamespace.Sync));
-                EAS.generated.SyncResponseNamespace.Sync sync = (EAS.generated.SyncResponseNamespace.Sync)deser.Deserialize(streamOut);
+                EAS.generated.SyncResponseNamespace.Sync sync = (EAS.generated.SyncResponseNamespace.Sync)deser.Deserialize(xmlReader);
                 //SyncCollectionsCollectionResponsesFetchApplicationData 
                 //[System.Xml.Serialization.XmlElementAttribute("Attachments", typeof(Attachments[]), Namespace = "AirSyncBase")] //ZMIANA Z Attachments na Attachments[]
                 return sync;
@@ -784,36 +786,44 @@ namespace MailSync
 
         private EAS.generated.ItemOperationsResponseNamespace.ItemOperations GetFetchedMail(string x)
         {
+            try
+            {
+                XmlReaderSettings xmlReaderSettings = new XmlReaderSettings() { CheckCharacters = false };
+                XmlReader xmlReader = XmlTextReader.Create(new StringReader(x), xmlReaderSettings);
 
-            MemoryStream streamOut = new MemoryStream();
-            StreamWriter writer = new StreamWriter(streamOut);
-            writer.Write(x);
-            writer.Flush();
-            streamOut.Position = 0;
+                XmlSerializer deser = new XmlSerializer(typeof(EAS.generated.ItemOperationsResponseNamespace.ItemOperations));
+                EAS.generated.ItemOperationsResponseNamespace.ItemOperations fetch = (EAS.generated.ItemOperationsResponseNamespace.ItemOperations)deser.Deserialize(xmlReader);
 
-            XmlSerializer deser = new XmlSerializer(typeof(EAS.generated.ItemOperationsResponseNamespace.ItemOperations));
-            EAS.generated.ItemOperationsResponseNamespace.ItemOperations fetch = (EAS.generated.ItemOperationsResponseNamespace.ItemOperations)deser.Deserialize(streamOut);
+                //1
+                //SyncCollectionsCollectionResponsesFetchApplicationData 
+                //[System.Xml.Serialization.XmlElementAttribute("Attachments", typeof(Attachments[]), Namespace = "AirSyncBase")] //ZMIANA Z Attachments na Attachments[]
+                //2
+                /// <uwagi/>
+                //[System.Xml.Serialization.XmlElementAttribute("Categories", typeof(Categories))] //zamiana ze string[] na object[]
+                //public object[] Categories
+                //{
+                //get
+                //{
+                //  return this.categoriesField;
+                //}
+                //set
+                //{
+                //  this.categoriesField = value;
+                //}
+                //3
+                //Zakomentowano wszystkie wystapienia Attendess i AttendeesAttendess
 
-            //1
-            //SyncCollectionsCollectionResponsesFetchApplicationData 
-            //[System.Xml.Serialization.XmlElementAttribute("Attachments", typeof(Attachments[]), Namespace = "AirSyncBase")] //ZMIANA Z Attachments na Attachments[]
-            //2
-            /// <uwagi/>
-            //[System.Xml.Serialization.XmlElementAttribute("Categories", typeof(Categories))] //zamiana ze string[] na object[]
-            //public object[] Categories
-            //{
-            //get
-            //{
-            //  return this.categoriesField;
-            //}
-            //set
-            //{
-            //  this.categoriesField = value;
-            //}
-            //3
-            //Zakomentowano wszystkie wystapienia Attendess i AttendeesAttendess
-
-            return fetch;
+                return fetch;
+            }
+            catch(Exception ex)
+            {
+                List<string> lstError = new List<string>();
+                lstError.Add(ex.Message);
+                lstError.Add(x);
+                File.WriteAllLines(mailDir + "\\" + DateTime.Now.Ticks + ".txt", lstError);
+                return null;
+            }
+                
         }
 
 

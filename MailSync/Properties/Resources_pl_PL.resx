@@ -288,4 +288,7 @@
   <data name="sharingViolationError" xml:space="preserve">
     <value>Błąd współdzielenia, spróbuj zrestartować Outlook</value>
   </data>
+  <data name="errSerialization" xml:space="preserve">
+    <value>Błąd podczas deserializacji, sprawdź katalog wyjściowy i przejrzyj pliki tekstowe. Kliknij OK, aby kontynuować</value>
+  </data>
 </root>
