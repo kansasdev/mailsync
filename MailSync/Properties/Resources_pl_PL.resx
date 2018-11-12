@@ -291,4 +291,7 @@
   <data name="errSerialization" xml:space="preserve">
     <value>Błąd podczas deserializacji, sprawdź katalog wyjściowy i przejrzyj pliki tekstowe. Kliknij OK, aby kontynuować</value>
   </data>
+  <data name="settingsCbExchange" xml:space="preserve">
+    <value>Czy MSExchange?</value>
+  </data>
 </root>

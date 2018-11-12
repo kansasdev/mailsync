@@ -11,6 +11,7 @@ using System.Resources;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace MailSync
 {
@@ -81,8 +82,7 @@ namespace MailSync
                 // Send the request
 
                 ASOptionsResponse optionsResponse = optionsRequest.GetOptions();
-
-               
+                              
                 //check dev status
                 string setXml = SetSettingsObjectAsXml();
                 ASCommandRequest request = CreateCommandRequest("Settings", cred, devID, devType, protVer, server, username, setXml);
@@ -483,6 +483,9 @@ namespace MailSync
             commandRequest.User = username;
             commandRequest.UseSSL = true;
             commandRequest.PolicyKey = policyKey;
+            //XmlDocument doc = new XmlDocument();
+            //doc.LoadXml(wbXmlPayload);
+            //doc.PreserveWhitespace = false;
             commandRequest.XmlString = wbXmlPayload;
 
             return commandRequest;
@@ -522,7 +525,7 @@ namespace MailSync
             EAS.generated.ProvisionRequestNamespace.Settings set = new EAS.generated.ProvisionRequestNamespace.Settings();
             set.DeviceInformation = new EAS.generated.ProvisionRequestNamespace.DeviceInformation();
             set.DeviceInformation.Set = new EAS.generated.ProvisionRequestNamespace.DeviceInformationSet();
-            set.DeviceInformation.Set.Model = Environment.MachineName;
+            set.DeviceInformation.Set.Model = "masz";//Environment.MachineName;
             set.DeviceInformation.Set.IMEI = "12123434";
             set.DeviceInformation.Set.OS = Environment.OSVersion.Platform.ToString();
             set.DeviceInformation.Set.FriendlyName = "MailSync";

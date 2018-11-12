@@ -25,10 +25,22 @@ namespace MailSync
         {
             Properties.Settings.Default.EASServer = tbServer.Text;
             Properties.Settings.Default.ProtocolVersion = tbProtocolVersion.Text;
-            if(!cbLocked.Checked && tbDevice.Text!="")
+            Properties.Settings.Default.IsExchange = cbExchange.Checked;
+            if (cbExchange.Checked)
             {
-                Properties.Settings.Default.DevID = tbDevice.Text;
-                Properties.Settings.Default.Username = tbUsername.Text;
+                if(tbDevice.Text!="")
+                {
+                    Properties.Settings.Default.DevID = tbDevice.Text;
+                    Properties.Settings.Default.Username = tbUsername.Text;
+                }
+            }
+            else
+            {
+                if (!cbLocked.Checked && tbDevice.Text != "")
+                {
+                    Properties.Settings.Default.DevID = tbDevice.Text;
+                    Properties.Settings.Default.Username = tbUsername.Text;
+                }
             }
             Properties.Settings.Default.Save();
             this.Close();

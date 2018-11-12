@@ -435,71 +435,78 @@ namespace MailSync
             lblConverted.Label = "";
             lblNew.Label = "";
             lblTotal.Label = "";
-            if (string.IsNullOrEmpty(Settings.Default.EASServer) || string.IsNullOrEmpty(Settings.Default.ProtocolVersion))
+            if (Properties.Settings.Default.IsExchange)
             {
-                SettingsForm sf = new SettingsForm();
-                sf.ShowDialog();
+
             }
-
-            if (!string.IsNullOrEmpty(Settings.Default.EASServer) && !string.IsNullOrEmpty(Settings.Default.ProtocolVersion)&& !string.IsNullOrEmpty(Settings.Default.DevID))
+            else
             {
-                btnImport.Enabled = false;
-                btnDirectory.Enabled = false;
-                btnHelp.Enabled = false;
-                btnClean.Enabled = false;
-                btnConfig.Enabled = false;
-                btnSync.Enabled = false;
-                DialogResult dr = DialogResult.OK;
-                if (string.IsNullOrEmpty(Settings.Default.Username)||string.IsNullOrEmpty(Settings.Default.Password) || Error401)
+                if (string.IsNullOrEmpty(Settings.Default.EASServer) || string.IsNullOrEmpty(Settings.Default.ProtocolVersion))
                 {
-                    Credentials cred = new Credentials();
-                    cred.GetCredentials(rm.GetString("credTitle"), rm.GetString("credMessage"), ref user, ref Pass);
+                    SettingsForm sf = new SettingsForm();
+                    sf.ShowDialog();
+                }
 
-
-                    if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(Pass))
+                if (!string.IsNullOrEmpty(Settings.Default.EASServer) && !string.IsNullOrEmpty(Settings.Default.ProtocolVersion) && !string.IsNullOrEmpty(Settings.Default.DevID))
+                {
+                    btnImport.Enabled = false;
+                    btnDirectory.Enabled = false;
+                    btnHelp.Enabled = false;
+                    btnClean.Enabled = false;
+                    btnConfig.Enabled = false;
+                    btnSync.Enabled = false;
+                    DialogResult dr = DialogResult.OK;
+                    if (string.IsNullOrEmpty(Settings.Default.Username) || string.IsNullOrEmpty(Settings.Default.Password) || Error401)
                     {
-                        dr = DialogResult.No;
+                        Credentials cred = new Credentials();
+                        cred.GetCredentials(rm.GetString("credTitle"), rm.GetString("credMessage"), ref user, ref Pass);
+
+
+                        if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(Pass))
+                        {
+                            dr = DialogResult.No;
+                        }
+                        else
+                        {
+                            Settings.Default.Username = user;
+                            Settings.Default.Password = UTF8Encoding.Default.GetString(ProtectedData.Protect(UTF8Encoding.Default.GetBytes(Pass), null, DataProtectionScope.CurrentUser));
+                        }
+
+                    }
+
+                    if (dr == DialogResult.OK)
+                    {
+
+                        eas = new EASDialog(rm, Settings.Default.Username, UTF8Encoding.Default.GetString(ProtectedData.Unprotect(UTF8Encoding.Default.GetBytes(Settings.Default.Password), null, DataProtectionScope.CurrentUser)), Settings.Default.EASServer, Settings.Default.ProtocolVersion, Settings.Default.DevID, Settings.Default.DevType);
+                        eas.TotalNumberOfFilesEvent += md_TotalNumberOfFilesEvent;
+                        eas.NewFilesNumberEvent += md_NewFilesNumberEvent;
+                        eas.ConvertedFilesNumberEvent += md_ConvertedFilesNumberEvent;
+                        string kom = string.Empty;
+
+                        bool result = eas.Initialize(ref kom);
+                        if (result)
+                        {
+                            BackgroundWorker bwOnline = new BackgroundWorker();
+
+                            bwOnline.DoWork += BwOnline_DoWork;
+                            bwOnline.RunWorkerCompleted += BwOnline_RunWorkerCompleted;
+                            bwOnline.RunWorkerAsync();
+                        }
                     }
                     else
                     {
-                        Settings.Default.Username = user;
-                        Settings.Default.Password = UTF8Encoding.Default.GetString(ProtectedData.Protect(UTF8Encoding.Default.GetBytes(Pass), null, DataProtectionScope.CurrentUser));
-                    }
-                                      
-                }
-
-                if (dr == DialogResult.OK)
-                {
-
-                    eas = new EASDialog(rm, Settings.Default.Username, UTF8Encoding.Default.GetString(ProtectedData.Unprotect(UTF8Encoding.Default.GetBytes(Settings.Default.Password),null,DataProtectionScope.CurrentUser)), Settings.Default.EASServer, Settings.Default.ProtocolVersion, Settings.Default.DevID,Settings.Default.DevType);
-                    eas.TotalNumberOfFilesEvent += md_TotalNumberOfFilesEvent;
-                    eas.NewFilesNumberEvent += md_NewFilesNumberEvent;
-                    eas.ConvertedFilesNumberEvent += md_ConvertedFilesNumberEvent;
-                    string kom = string.Empty;
-
-                    bool result = eas.Initialize(ref kom);
-                    if (result)
-                    {
-                        BackgroundWorker bwOnline = new BackgroundWorker();
-
-                        bwOnline.DoWork += BwOnline_DoWork;
-                        bwOnline.RunWorkerCompleted += BwOnline_RunWorkerCompleted;
-                        bwOnline.RunWorkerAsync();
+                        btnImport.Enabled = true;
+                        btnDirectory.Enabled = true;
+                        btnHelp.Enabled = true;
+                        btnClean.Enabled = true;
+                        btnConfig.Enabled = true;
+                        btnSync.Enabled = true;
                     }
                 }
                 else
                 {
-                    btnImport.Enabled = true;
-                    btnDirectory.Enabled = true;
-                    btnHelp.Enabled = true;
-                    btnClean.Enabled = true;
-                    btnConfig.Enabled = true;
-                    btnSync.Enabled = true;
+                    MessageBox.Show(rm.GetString("settingsMess"));
                 }
-            }
-            else
-            {
-                MessageBox.Show(rm.GetString("settingsMess"));
             }
         }
 

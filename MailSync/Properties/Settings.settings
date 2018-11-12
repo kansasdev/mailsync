@@ -23,5 +23,8 @@
     <Setting Name="DevID" Type="System.String" Scope="User">
       <Value Profile="(Default)">ID</Value>
     </Setting>
+    <Setting Name="IsExchange" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

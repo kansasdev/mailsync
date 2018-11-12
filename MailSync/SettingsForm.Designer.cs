@@ -49,10 +49,12 @@ namespace MailSync
         {
             if (Thread.CurrentThread.CurrentCulture.Name == "pl-PL")
             {
+
                 rm = new ResourceManager("MailSync.Properties.Resources_pl_PL", typeof(RibbonOutlook).Assembly);
             }
             else
             {
+
                 rm = new ResourceManager("MailSync.Properties.Resources", typeof(RibbonOutlook).Assembly);
             }
 
@@ -67,6 +69,7 @@ namespace MailSync
             this.lblProtocol = new System.Windows.Forms.Label();
             this.lblUsername = new System.Windows.Forms.Label();
             this.lblDevice = new System.Windows.Forms.Label();
+            this.cbExchange = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // tbServer
@@ -85,38 +88,37 @@ namespace MailSync
             // 
             // tbUsername
             // 
+            this.tbUsername.Enabled = false;
             this.tbUsername.Location = new System.Drawing.Point(85, 65);
             this.tbUsername.Name = "tbUsername";
             this.tbUsername.Size = new System.Drawing.Size(187, 20);
             this.tbUsername.TabIndex = 2;
-            this.tbUsername.Enabled = false;
-            
             // 
             // tbDevice
             // 
+            this.tbDevice.Enabled = false;
             this.tbDevice.Location = new System.Drawing.Point(85, 91);
             this.tbDevice.Name = "tbDevice";
             this.tbDevice.Size = new System.Drawing.Size(95, 20);
             this.tbDevice.TabIndex = 3;
-            this.tbDevice.Enabled = false;
             // 
             // cbLocked
             // 
             this.cbLocked.AutoSize = true;
+            this.cbLocked.Checked = true;
+            this.cbLocked.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbLocked.Location = new System.Drawing.Point(192, 93);
             this.cbLocked.Name = "cbLocked";
             this.cbLocked.Size = new System.Drawing.Size(15, 14);
             this.cbLocked.TabIndex = 4;
             this.cbLocked.UseVisualStyleBackColor = true;
             this.cbLocked.Text = rm.GetString("settingsChkUnblock");
-            this.cbLocked.Checked = true;
             this.cbLocked.CheckedChanged += new System.EventHandler(this.cbLocked_CheckedChanged);
-            
             // 
             // btnOK
             // 
             this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btnOK.Location = new System.Drawing.Point(85, 127);
+            this.btnOK.Location = new System.Drawing.Point(85, 138);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(95, 30);
             this.btnOK.TabIndex = 5;
@@ -126,7 +128,7 @@ namespace MailSync
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(186, 127);
+            this.btnCancel.Location = new System.Drawing.Point(186, 138);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(95, 30);
             this.btnCancel.TabIndex = 6;
@@ -166,17 +168,28 @@ namespace MailSync
             this.lblDevice.AutoSize = true;
             this.lblDevice.Location = new System.Drawing.Point(5, 93);
             this.lblDevice.Name = "lblDevice";
+            this.lblDevice.Size = new System.Drawing.Size(0, 13);
             this.lblDevice.Text = rm.GetString("settingsLblDevice");
-            //this.lblDevice.Size = new System.Drawing.Size(0, 13);
             this.lblDevice.TabIndex = 10;
+            // 
+            // cbExchange
+            // 
+            this.cbExchange.AutoSize = true;
+            this.cbExchange.Checked = true;
+            this.cbExchange.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbExchange.Location = new System.Drawing.Point(192, 118);
+            this.cbExchange.Name = "cbExchange";
+            //this.cbExchange.Size = new System.Drawing.Size(15, 14);
+            this.cbExchange.Text = rm.GetString("settingsCbExchange");
+            this.cbExchange.TabIndex = 11;
+            this.cbExchange.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 180);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
+            this.Controls.Add(this.cbExchange);
             this.Controls.Add(this.lblDevice);
             this.Controls.Add(this.lblUsername);
             this.Controls.Add(this.lblProtocol);
@@ -188,6 +201,8 @@ namespace MailSync
             this.Controls.Add(this.tbUsername);
             this.Controls.Add(this.tbProtocolVersion);
             this.Controls.Add(this.tbServer);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "SettingsForm";
             this.Text = rm.GetString("settingsTitle");
             this.ResumeLayout(false);
@@ -208,5 +223,6 @@ namespace MailSync
         private System.Windows.Forms.Label lblProtocol;
         private System.Windows.Forms.Label lblUsername;
         private System.Windows.Forms.Label lblDevice;
+        private System.Windows.Forms.CheckBox cbExchange;
     }
 }
