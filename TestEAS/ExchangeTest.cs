@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
 using Microsoft.Exchange.WebServices.Data;
 using Microsoft.VisualBasic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -32,24 +35,49 @@ namespace TestEAS
                 service.Url = new Uri(url);
                 service.AutodiscoverUrl(mail, RedirectionUrlValidationCallback);
 
-                FindItemsResults<Item> findResults = service.FindItems(
-                    WellKnownFolderName.Inbox,
-                        new ItemView(10));
+                SearchFilter sfs = new SearchFilter.IsGreaterThan(ItemSchema.DateTimeReceived, DateTime.Now.AddDays(-3));
 
-                foreach (Item item in findResults.Items)
+                int offset = 0;
+                int pageSize = 50;
+                bool more = true;
+                ItemView view = new ItemView(pageSize, offset, OffsetBasePoint.Beginning);
+
+                FindItemsResults<Item> findResults;
+                List<EmailMessage> emails = new List<EmailMessage>();
+
+                while (more)
                 {
-                    Trace.WriteLine(item.Subject);
+                    findResults = service.FindItems(WellKnownFolderName.Inbox,sfs, view);
+                    foreach (var item in findResults.Items)
+                    {
+                        emails.Add((EmailMessage)item);
+                    }
                     
+                    more = findResults.MoreAvailable;
+                    if (more)
+                    {
+                        view.Offset += pageSize;
+                    }
+                }
+                PropertySet properties = (BasePropertySet.FirstClassProperties); //A PropertySet with the explicit properties you want goes here
+                service.LoadPropertiesForItems(emails, properties);
+
+                foreach (EmailMessage em in emails)
+                {
                     
+                    em.Load(new PropertySet(ItemSchema.MimeContent));
+                    MimeContent mc = em.MimeContent;
+                    string nazwa = Guid.NewGuid().ToString();                  
+
+                    File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)+"\\Mailbox\\"+nazwa+".eml", mc.Content);
                 }
 
 
-
-                Console.ReadLine();
+                Trace.WriteLine("TEST has ended");
             }
             catch(Exception ex)
             {
-                Trace.WriteLine("BŁĄD: " + ex.Message);
+                Trace.WriteLine("Error: " + ex.Message);
             }
         }
 

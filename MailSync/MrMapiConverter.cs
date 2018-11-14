@@ -143,48 +143,57 @@ namespace MailSync
 
         private bool Is64Bit(Outlook.Application app)
         {
-            if (app.Version.StartsWith("15") || app.Version.StartsWith("16") || app.Version.StartsWith("17"))
+            try
             {
-                RegistryKey rk = Registry.LocalMachine;
-                RegistryKey sk = null;
-                if (app.Version.StartsWith("15"))
-                {
-                    sk = rk.OpenSubKey("SOFTWARE\\Microsoft\\Office\\15.0\\Outlook");
-                    if (sk == null)
-                    {
-                        sk = rk.OpenSubKey("SOFTWARE\\Wow6432Node\\Microsoft\\Office\\15.0\\Outlook");
-                    }
-                    else if (app.Version.StartsWith("16"))
-                    {
-                        sk = rk.OpenSubKey("SOFTWARE\\Microsoft\\Office\\16.0\\Outlook");
-                        if (sk == null)
-                        {
-                            sk = rk.OpenSubKey("SOFTWARE\\Wow6432Node\\Microsoft\\Office\\16.0\\Outlook");
-                        }
-                    }
-                    else if (app.Version.StartsWith("17"))
-                    {
-                        sk = rk.OpenSubKey("SOFTWARE\\Microsoft\\Office\\17.0\\Outlook");
-                        if (sk == null)
-                        {
-                            sk = rk.OpenSubKey("SOFTWARE\\Wow6432Node\\Microsoft\\Office\\17.0\\Outlook");
-                        }
-                    }
-                    else
-                    {
-                        sk = null;
-                    }
-                    string architektura = string.Empty;
-                    if (sk != null)
-                    {
-                        architektura = (string)sk.GetValue("Bitness");
-                        sk.Close();
-                    }
-                    rk.Close();
 
-                    if (!string.IsNullOrEmpty(architektura) && architektura == "x64")
+
+                if (app.Version.StartsWith("15") || app.Version.StartsWith("16") || app.Version.StartsWith("17"))
+                {
+                    RegistryKey rk = Registry.LocalMachine;
+                    RegistryKey sk = null;
+                    if (app.Version.StartsWith("15"))
                     {
-                        return true;
+                        sk = rk.OpenSubKey("SOFTWARE\\Microsoft\\Office\\15.0\\Outlook");
+                        if (sk == null)
+                        {
+                            sk = rk.OpenSubKey("SOFTWARE\\Wow6432Node\\Microsoft\\Office\\15.0\\Outlook");
+                        }
+                        else if (app.Version.StartsWith("16"))
+                        {
+                            sk = rk.OpenSubKey("SOFTWARE\\Microsoft\\Office\\16.0\\Outlook");
+                            if (sk == null)
+                            {
+                                sk = rk.OpenSubKey("SOFTWARE\\Wow6432Node\\Microsoft\\Office\\16.0\\Outlook");
+                            }
+                        }
+                        else if (app.Version.StartsWith("17"))
+                        {
+                            sk = rk.OpenSubKey("SOFTWARE\\Microsoft\\Office\\17.0\\Outlook");
+                            if (sk == null)
+                            {
+                                sk = rk.OpenSubKey("SOFTWARE\\Wow6432Node\\Microsoft\\Office\\17.0\\Outlook");
+                            }
+                        }
+                        else
+                        {
+                            sk = null;
+                        }
+                        string architektura = string.Empty;
+                        if (sk != null)
+                        {
+                            architektura = (string)sk.GetValue("Bitness");
+                            sk.Close();
+                        }
+                        rk.Close();
+
+                        if (!string.IsNullOrEmpty(architektura) && architektura == "x64")
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
                     else
                     {
@@ -193,12 +202,12 @@ namespace MailSync
                 }
                 else
                 {
-                    return false;
+                    return true; //shotgun debugging
                 }
             }
-            else
+            catch(Exception ex)
             {
-                return true; //shotgun debugging
+                return false;
             }
         }
 

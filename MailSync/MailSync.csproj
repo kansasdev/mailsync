@@ -215,6 +215,7 @@
   <ItemGroup>
     <Compile Include="Credentials.cs" />
     <Compile Include="EASDialog.cs" />
+    <Compile Include="ExDialog.cs" />
     <Compile Include="FileDate.cs" />
     <Compile Include="FolderDecision.cs">
       <SubType>Form</SubType>
@@ -317,10 +318,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>MailSync_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>MailSync_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>A1F6ADDD76693DB87B2637B9853A01292426BB25</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>DD5D57100B0B90E8796CCF0667EEC798804FCED2</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />

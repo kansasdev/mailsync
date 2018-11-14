@@ -349,6 +349,15 @@ namespace MailSync.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EMAIL or ID.
+        /// </summary>
+        internal static string settingsLblEmail {
+            get {
+                return ResourceManager.GetString("settingsLblEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PROTOCOL.
         /// </summary>
         internal static string settingsLblProtocol {
@@ -583,7 +592,7 @@ namespace MailSync.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Address for example server.eas.uk.
+        ///   Looks up a localized string similar to Address for example server.eas.uk or https://exchange.com.
         /// </summary>
         internal static string tooltipServerSettings {
             get {

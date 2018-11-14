@@ -280,7 +280,7 @@
     <value>Wersja protokołu w postaci np. 14</value>
   </data>
   <data name="tooltipServerSettings" xml:space="preserve">
-    <value>Adres w postaci serwer.eas.pl</value>
+    <value>Adres w postaci serwer.eas.pl lub https://exchange.com</value>
   </data>
   <data name="strNoEmlInside" xml:space="preserve">
     <value>Wskazany katalog lokalny nie zawiera maili</value>
@@ -293,5 +293,8 @@
   </data>
   <data name="settingsCbExchange" xml:space="preserve">
     <value>Czy MSExchange?</value>
+  </data>
+  <data name="settingsLblEmail" xml:space="preserve">
+    <value>EMAIL LUB ID</value>
   </data>
 </root>

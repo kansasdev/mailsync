@@ -280,7 +280,7 @@
     <value>Protocol version, for example 14</value>
   </data>
   <data name="tooltipServerSettings" xml:space="preserve">
-    <value>Address for example server.eas.uk</value>
+    <value>Address for example server.eas.uk or https://exchange.com</value>
   </data>
   <data name="strNoEmlInside" xml:space="preserve">
     <value>Selected local folder doesn't contain email files</value>
@@ -293,5 +293,8 @@
   </data>
   <data name="settingsCbExchange" xml:space="preserve">
     <value>Is MSExchane?</value>
+  </data>
+  <data name="settingsLblEmail" xml:space="preserve">
+    <value>EMAIL or ID</value>
   </data>
 </root>

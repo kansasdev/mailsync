@@ -437,7 +437,44 @@ namespace MailSync
             lblTotal.Label = "";
             if (Properties.Settings.Default.IsExchange)
             {
+                if (string.IsNullOrEmpty(Settings.Default.EASServer) || string.IsNullOrEmpty(Settings.Default.Email))
+                {
+                    SettingsForm sf = new SettingsForm();
+                    sf.ShowDialog();
+                }
 
+                if (!string.IsNullOrEmpty(Settings.Default.EASServer) && !string.IsNullOrEmpty(Settings.Default.Email))
+                {
+                    btnImport.Enabled = false;
+                    btnDirectory.Enabled = false;
+                    btnHelp.Enabled = false;
+                    btnClean.Enabled = false;
+                    btnConfig.Enabled = false;
+                    btnSync.Enabled = false;
+                    DialogResult dr = DialogResult.OK;
+                    if (string.IsNullOrEmpty(Settings.Default.Username) || string.IsNullOrEmpty(Settings.Default.Password))
+                    {
+                        Credentials cred = new Credentials();
+                        cred.GetCredentials(rm.GetString("credTitle"), rm.GetString("credMessage"), ref user, ref Pass);
+
+
+                        if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(Pass))
+                        {
+                            dr = DialogResult.No;
+                        }
+                        else
+                        {
+                            Settings.Default.Username = user;
+                            Settings.Default.Password = UTF8Encoding.Default.GetString(ProtectedData.Protect(UTF8Encoding.Default.GetBytes(Pass), null, DataProtectionScope.CurrentUser));
+                        }
+
+                    }
+
+                    if (dr == DialogResult.OK)
+                    {
+
+                    }
+                }
             }
             else
             {
