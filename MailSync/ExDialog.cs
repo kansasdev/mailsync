@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Resources;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,7 +54,7 @@ namespace MailSync
                     Directory.CreateDirectory(mailDir);
                 }
 
-                ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
+                service = new ExchangeService(ExchangeVersion.Exchange2013_SP1);
                 service.Credentials = cred;
                 service.TraceEnabled = true;
                 service.TraceFlags = TraceFlags.All;
@@ -83,189 +84,80 @@ namespace MailSync
                 view.Traversal = FolderTraversal.Deep;
                 if (service != null)
                 {
-                    FindFoldersResults findFolderResults = service.FindFolders(WellKnownFolderName.Root, view);
-                    List<List<string>> lstDirsToChoose = new List<List<string>>();
+                    List<string> lstDirsToChoose = new List<string>();
                     List<string> lstDirsToDisplay = new List<string>();
                     //find specific folder
-                    foreach (Folder f in findFolderResults)
-                    {
-                        lstDirsToChoose.Add(new List<string> { f.Id.ToString(), f.DisplayName });
-                        lstDirsToDisplay.Add(f.DisplayName);
-                    }
+                    
+                        lstDirsToChoose.Add(WellKnownFolderName.Inbox.ToString());
+                    lstDirsToChoose.Add(WellKnownFolderName.SentItems.ToString());
+                    lstDirsToDisplay.Add(WellKnownFolderName.Inbox.ToString());
+                    lstDirsToDisplay.Add(WellKnownFolderName.SentItems.ToString());
+                    
                     FolderDecision fd = new FolderDecision(lstDirsToDisplay, true);
+                    fd.SelectedFolder = lstDirsToChoose.FirstOrDefault();
                     fd.ShowDialog();
-                }
 
-                /*
-                if (fsFromEAS != null && fsFromEAS.Status == "1" && fsFromEAS.Changes != null && fsFromEAS.Changes.Add != null)
+                    if (!Directory.Exists(mailDir + "\\" + fd.SelectedFolder.Replace(" ", "")))
                     {
-                        List<List<string>> lstDirsToChoose = new List<List<string>>();
-                        List<string> lstDirsToDisplay = new List<string>();
-                        foreach (EAS.generated.FolderResponseNamespace.FolderSyncChangesAdd fsca in fsFromEAS.Changes.Add)
-                        {
-                            if (fsca.Type == "5" || fsca.Type == "2")
-                            {
-                                lstDirsToChoose.Add(new List<string> { fsca.ServerId, fsca.DisplayName });
-                                lstDirsToDisplay.Add(fsca.DisplayName);
-                            }
-                        }
-                        FolderDecision fd = new FolderDecision(lstDirsToDisplay, true);
-                        fd.SelectedFolder = lstDirsToChoose.Where(q => q[0] == "4").FirstOrDefault()[1];
-                        fd.ShowDialog();
-
-                        if (!Directory.Exists(mailDir + "\\" + fd.SelectedFolder.Replace(" ", "")))
-                        {
-                            Directory.CreateDirectory(mailDir + "\\" + fd.SelectedFolder.Replace(" ", ""));
-
-                        }
-                        mailDir = mailDir + "\\" + fd.SelectedFolder.Replace(" ", "");
-                        folderToSync = lstDirsToChoose.Where(q => q[1] == fd.SelectedFolder).FirstOrDefault()[0];
-                        days = fd.SelectedTime;
+                        Directory.CreateDirectory(mailDir + "\\" + fd.SelectedFolder.Replace(" ", ""));
 
                     }
+                    mailDir = mailDir + "\\" + fd.SelectedFolder.Replace(" ", "");
+                    folderToSync = lstDirsToChoose.Where(q => q == fd.SelectedFolder).FirstOrDefault();
+                    days = fd.SelectedTime;
 
-                    //sync 1          
+                    SearchFilter sfs = new SearchFilter.IsGreaterThan(ItemSchema.DateTimeReceived, DateTime.Now.AddDays(-int.Parse(days)));
 
-                    xmlBuilder = new StringBuilder();
+                    int offset = 0;
+                    int pageSize = 50;
+                    bool more = true;
+                    ItemView viewItem = new ItemView(pageSize, offset, OffsetBasePoint.Beginning);
 
-                    xmlBuilder.Append(SetSyncObjectAsXml(syncKey, folderToSync, days));
+                    FindItemsResults<Item> findResults;
+                    List<EmailMessage> emails = new List<EmailMessage>();
 
-                    XmlDocument xDoc = new XmlDocument();
-                    xDoc.PreserveWhitespace = true;
-                    xDoc.LoadXml(xmlBuilder.ToString());
-
-                    commandRequest.XmlString = xDoc.InnerXml;
-
-                    // Send the request
-                    commandRequest = CreateCommandRequest("Sync", cred, devID, devType, protVer, server, username, xmlBuilder.ToString(), policyKey);
-                    commandResponse = commandRequest.GetResponse();
-
-                    EAS.generated.SyncResponseNamespace.Sync syncResponse = GetSyncObjectFromXML(commandResponse.XmlString);
-                    if (syncResponse != null)
+                    while (more)
                     {
-                        if (syncResponse.Item is EAS.generated.SyncResponseNamespace.SyncCollections)
+                        WellKnownFolderName folderName = WellKnownFolderName.Inbox;
+                        if(folderToSync == WellKnownFolderName.Inbox.ToString())
                         {
-                            EAS.generated.SyncResponseNamespace.SyncCollections sc = (EAS.generated.SyncResponseNamespace.SyncCollections)syncResponse.Item;
+                            folderName = WellKnownFolderName.Inbox;
+                        }
+                        if(folderToSync == WellKnownFolderName.SentItems.ToString())
+                        {
+                            folderName = WellKnownFolderName.SentItems;
+                        }
 
-                            if (sc.Collection != null)
-                            {
+                        findResults = service.FindItems(folderName, sfs, viewItem);
+                        foreach (var item in findResults.Items)
+                        {
+                            emails.Add((EmailMessage)item);
+                        }
 
-                                //WYCHWYC INBOX
-                                foreach (EAS.generated.SyncResponseNamespace.SyncCollectionsCollection scc in sc.Collection)
-                                {
-
-                                    List<EAS.generated.SyncResponseNamespace.ItemsChoiceType7> lst = new List<EAS.generated.SyncResponseNamespace.ItemsChoiceType7>(scc.ItemsElementName);
-                                    int index = lst.FindIndex(q => q == EAS.generated.SyncResponseNamespace.ItemsChoiceType7.CollectionId);
-                                    if (index > 0)
-                                    {
-                                        if (scc.Items[index].ToString() == folderToSync)
-                                        {
-                                            List<EAS.generated.SyncResponseNamespace.ItemsChoiceType7> lstSync = new List<EAS.generated.SyncResponseNamespace.ItemsChoiceType7>(scc.ItemsElementName);
-                                            int indexSync = lst.FindIndex(q => q == EAS.generated.SyncResponseNamespace.ItemsChoiceType7.SyncKey);
-
-                                            syncKey = scc.Items[indexSync].ToString();
-                                            break;
-                                        }
-                                    }
-
-                                }
-
-
-                            }
+                        more = findResults.MoreAvailable;
+                        if (more)
+                        {
+                            viewItem.Offset += pageSize;
                         }
                     }
-                
-                List<string> lstEmailsToFetch = new List<string>();
-                bool continuingLoop = true;
-                do
-                {
-
-                    //sync2
-                    xmlBuilder = new StringBuilder();
-                    xmlBuilder.Append(SetSyncObjectAsXml(syncKey, folderToSync, days));
-
-                    // Send the request
-                    commandRequest = CreateCommandRequest("Sync", cred, devID, devType, protVer, server, username, xmlBuilder.ToString(), policyKey);
-                    commandRequest.XmlString = xmlBuilder.ToString();
-                    commandResponse = commandRequest.GetResponse();
-
-                    EAS.generated.SyncResponseNamespace.Sync syncResponse2 = GetSyncObjectFromXML(commandResponse.XmlString);
-
-                    if (syncResponse2 != null)
+                    PropertySet properties = (BasePropertySet.FirstClassProperties); //A PropertySet with the explicit properties you want goes here
+                    service.LoadPropertiesForItems(emails, properties);
+                    int index = 1;
+                    foreach (EmailMessage em in emails)
                     {
-
-                        if (syncResponse2.Item is EAS.generated.SyncResponseNamespace.SyncCollections)
+                        em.Load(new PropertySet(ItemSchema.MimeContent));
+                        MimeContent mc = em.MimeContent;
+                        string nazwa = BitConverter.ToString(MD5.Create().ComputeHash(ASCIIEncoding.ASCII.GetBytes(em.Id.UniqueId)));
+                        if (!File.Exists(mailDir+"\\"+nazwa+".eml"))
                         {
-                            EAS.generated.SyncResponseNamespace.SyncCollections sc = (EAS.generated.SyncResponseNamespace.SyncCollections)syncResponse2.Item;
-
-                            if (sc.Collection != null)
-                            {
-                                EAS.generated.SyncResponseNamespace.SyncCollectionsCollection[] scc = sc.Collection;
-                                foreach (EAS.generated.SyncResponseNamespace.SyncCollectionsCollection sccItem in scc)
-                                {
-
-                                    List<EAS.generated.SyncResponseNamespace.ItemsChoiceType7> lst = new List<EAS.generated.SyncResponseNamespace.ItemsChoiceType7>(sccItem.ItemsElementName);
-                                    int index = lst.FindIndex(q => q == EAS.generated.SyncResponseNamespace.ItemsChoiceType7.CollectionId);
-                                    if (index > 0)
-                                    {
-                                        if (sccItem.Items[index].ToString() == folderToSync)
-                                        {
-                                            EAS.generated.SyncResponseNamespace.SyncCollectionsCollectionCommands sccc = null;
-                                            List<EAS.generated.SyncResponseNamespace.ItemsChoiceType7> lstSync = new List<EAS.generated.SyncResponseNamespace.ItemsChoiceType7>(sccItem.ItemsElementName);
-                                            int indexCommand = lst.FindIndex(q => q == EAS.generated.SyncResponseNamespace.ItemsChoiceType7.Commands);
-
-                                            if (indexCommand > -1)
-                                            {
-                                                if (sccItem.Items[indexCommand] is EAS.generated.SyncResponseNamespace.SyncCollectionsCollectionCommands)
-                                                {
-                                                    sccc = (EAS.generated.SyncResponseNamespace.SyncCollectionsCollectionCommands)sccItem.Items[indexCommand];
-                                                    foreach (object o in sccc.Items)
-                                                    {
-                                                        if (o is EAS.generated.SyncResponseNamespace.SyncCollectionsCollectionCommandsAdd)
-                                                        {
-                                                            EAS.generated.SyncResponseNamespace.SyncCollectionsCollectionCommandsAdd sccca = (EAS.generated.SyncResponseNamespace.SyncCollectionsCollectionCommandsAdd)o;
-                                                            lstEmailsToFetch.Add(sccca.ServerId);
-                                                            OnTotalNumberOfFilesEvent(string.Format("{0} {1}", lstEmailsToFetch.Count.ToString(), _rm.GetString("strEmailsToSync")));
-                                                        }
-                                                    }
-                                                }
-                                            }
-
-                                            int synckeyIdx = lst.FindIndex(q => q == EAS.generated.SyncResponseNamespace.ItemsChoiceType7.SyncKey);
-
-                                            if (synckeyIdx > -1)
-                                            {
-                                                syncKey = sccItem.Items[synckeyIdx].ToString();
-                                                syncKey = (int.Parse(syncKey)).ToString();
-                                            }
-
-                                            int moreAvailableIdx = lst.FindIndex(q => q == EAS.generated.SyncResponseNamespace.ItemsChoiceType7.MoreAvailable);
-                                            if (moreAvailableIdx > -1)
-                                            {
-                                                continuingLoop = true;
-                                            }
-                                            else
-                                            {
-                                                continuingLoop = false;
-                                            }
-
-                                        }
-                                    }
-                                }
-                            }
+                            File.WriteAllBytes(mailDir + "\\" + nazwa + ".eml", em.MimeContent.Content);
+                            OnNewFilesNumberEvent(string.Format("{0} {1}", index, _rm.GetString("strNewEmailsInsideOutlookDirRes")));
+                            index++;
                         }
-                    }
-                    else
-                    {
-                        MessageBox.Show(_rm.GetString("errSerialization"));
                     }
                 }
-                while (continuingLoop);
-
-                WriteEmailsToDirectory(lstEmailsToFetch, folderToSync, policyKey);
-                */
+                               
                 return true;
-
             }
             catch (Exception ex)
             {

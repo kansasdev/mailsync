@@ -30,6 +30,7 @@ namespace MailSync
         private MrMapiConverter mapiMimeClass;
         private MailAdder ma;
         private EASDialog eas;
+        private ExDialog exd;
 
         private string syncKey = string.Empty;
         private bool Error449 = false;
@@ -472,7 +473,33 @@ namespace MailSync
 
                     if (dr == DialogResult.OK)
                     {
+                        exd = new ExDialog(rm, Settings.Default.Username, UTF8Encoding.Default.GetString(ProtectedData.Unprotect(UTF8Encoding.Default.GetBytes(Settings.Default.Password), null, DataProtectionScope.CurrentUser)), Settings.Default.EASServer, Settings.Default.Email, Settings.Default.DevID, Settings.Default.DevType);
+                        exd.TotalNumberOfFilesEvent += md_TotalNumberOfFilesEvent;
+                        exd.NewFilesNumberEvent += md_NewFilesNumberEvent;
+                        exd.ConvertedFilesNumberEvent += md_ConvertedFilesNumberEvent;
+                        string kom = string.Empty;
 
+                        bool result = exd.Initialize(ref kom);
+                        if (result)
+                        {
+                            if (result)
+                            {
+                                BackgroundWorker bwOnline = new BackgroundWorker();
+
+                                bwOnline.DoWork += BwOnline_DoWork;
+                                bwOnline.RunWorkerCompleted += BwOnline_RunWorkerCompleted;
+                                bwOnline.RunWorkerAsync();
+                            }
+                        }
+                        else
+                        {
+                            btnImport.Enabled = true;
+                            btnDirectory.Enabled = true;
+                            btnHelp.Enabled = true;
+                            btnClean.Enabled = true;
+                            btnConfig.Enabled = true;
+                            btnSync.Enabled = true;
+                        }
                     }
                 }
             }
@@ -574,10 +601,13 @@ namespace MailSync
             }
             else
             {
-                Error401 = false;
-                Error449 = false;
-                Settings.Default.SyncKey = syncKey;
-                Settings.Default.Save();
+                if (!Properties.Settings.Default.IsExchange)
+                {
+                    Error401 = false;
+                    Error449 = false;
+                    Settings.Default.SyncKey = syncKey;
+                    Settings.Default.Save();
+                }
             }
         }
 
@@ -585,31 +615,38 @@ namespace MailSync
         {
             
             string kom = string.Empty;
-            if (Error449||string.IsNullOrEmpty(syncKey))
+            if (!Properties.Settings.Default.IsExchange)
             {
-                //error viewing inside
-                bool res = eas.SetConnection(ref syncKey, ref kom);
-                if(res)
+                if (Error449 || string.IsNullOrEmpty(syncKey))
                 {
-                    Error449 = false;
-                    e.Result = eas.SetConversation(syncKey, "0", ref kom);
-                    
+                    //error viewing inside
+                    bool res = eas.SetConnection(ref syncKey, ref kom);
+                    if (res)
+                    {
+                        Error449 = false;
+                        e.Result = eas.SetConversation(syncKey, "0", ref kom);
+
+                    }
+                    else
+                    {
+                        throw new Exception(kom);
+                    }
+
                 }
                 else
                 {
+                    e.Result = eas.SetConversation(syncKey, "0", ref kom);
+                }
+                if (!(bool)e.Result)
+                {
+
+                    //jezeli provision wykonaj provisioning
                     throw new Exception(kom);
                 }
-
             }
             else
             {
-                e.Result = eas.SetConversation(syncKey,"0", ref kom);
-            }
-            if(!(bool)e.Result)
-            {
-                
-                //jezeli provision wykonaj provisioning
-                throw new Exception(kom);
+                e.Result = exd.SetConversation(ref kom);
             }
         }
 
