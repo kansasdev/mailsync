@@ -43,7 +43,7 @@
     <PublishUrl>C:\projekty\MailSyncSln\download\</PublishUrl>
     <InstallUrl>https://raw.githubusercontent.com/kansasdev/mailsync/master/download/</InstallUrl>
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.5.1.1</ApplicationVersion>
+    <ApplicationVersion>2.0.0.0</ApplicationVersion>
     <AutoIncrementApplicationRevision>false</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>0</UpdateInterval>
@@ -318,10 +318,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>MailSync_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>MailSync_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>DD5D57100B0B90E8796CCF0667EEC798804FCED2</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>A1F6ADDD76693DB87B2637B9853A01292426BB25</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
