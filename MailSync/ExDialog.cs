@@ -59,7 +59,7 @@ namespace MailSync
                 service.TraceEnabled = true;
                 service.TraceFlags = TraceFlags.All;
                 service.Url = new Uri(server);
-                service.AutodiscoverUrl(mail);
+                service.AutodiscoverUrl(mail,new Microsoft.Exchange.WebServices.Autodiscover.AutodiscoverRedirectionUrlValidationCallback(RedirectionCallback));
 
                 return true;
             }
@@ -70,7 +70,22 @@ namespace MailSync
             }
         }
 
-       
+       private bool RedirectionCallback(string redir)
+        {
+            bool result = false;
+
+            Uri redirectionUri = new Uri(redir);
+
+            // Validate the contents of the redirection URL. In this simple validation
+            // callback, the redirection URL is considered valid if it is using HTTPS
+            // to encrypt the authentication credentials. 
+            if (redirectionUri.Scheme == "https")
+            {
+                result = true;
+            }
+            return result;
+
+        }
 
         public bool SetConversation(ref string kom)
         {
